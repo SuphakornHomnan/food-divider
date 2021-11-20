@@ -17,9 +17,11 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
   return (
     <Table borderless bordered responsive="sm" className="my-4">
       <thead>
-        <th>รายการอาหาร</th>
-        <th>ราคา</th>
-        <th>คนที่ร่วมรายการ</th>
+        <tr>
+          <th>รายการอาหาร</th>
+          <th>ราคา</th>
+          <th>คนที่ร่วมรายการ</th>
+        </tr>
       </thead>
       <tbody>
         {foods.map((food) => (

@@ -1,21 +1,12 @@
 import type { NextPage } from "next";
 import React, { useState } from "react";
-import {
-  Card,
-  Container,
-  Modal,
-  Nav,
-  Button,
-  Row,
-  Col,
-  FormControl,
-} from "react-bootstrap";
+import { Card, Container, Nav } from "react-bootstrap";
 import { Member as MemberType } from "../scripts/dto/member-dto";
+import AddFoodModal from "../src/components/add-food-modal";
 import FoodForm from "../src/components/food-form";
-import FoodList, { Member } from "../src/components/food-list";
+import FoodList from "../src/components/food-list";
 import MemberForm from "../src/components/member-form";
 import MemberList from "../src/components/member-list";
-import SelectMember from "../src/components/select-mem";
 import { useModal } from "../src/hooks/use-modal";
 import { useFoodStore } from "../src/hooks/useFoodStore";
 
@@ -24,7 +15,7 @@ enum Navs {
   members = "members",
 }
 
-interface SelectMember extends MemberType {
+export interface SelectMember extends MemberType {
   select: boolean;
 }
 
@@ -41,14 +32,12 @@ const Home: NextPage = () => {
     calculate,
   } = useFoodStore();
 
-  const [price, setPrice] = useState<number>(0);
-
   const [selectMember, setSelectMember] = useState<SelectMember[]>([]);
 
-  const [open, close, { isOpen, message }] = useModal();
+  const [open, close, { isOpen, message: foodName }] = useModal();
 
-  const addFood = () => {
-    const food = addFoods(message, price);
+  const addFood = (price: number) => {
+    const food = addFoods(foodName, price);
     selectMember
       .filter((mem) => mem.select)
       .forEach((mem) => {
@@ -62,11 +51,6 @@ const Home: NextPage = () => {
     setSelectMember((prev) =>
       prev.map((m) => (m.id === id ? { ...m, select: !m.select } : m))
     );
-  };
-
-  const onHideModal = () => {
-    setPrice(0);
-    close();
   };
 
   const renderFoodTab = () => (
@@ -88,47 +72,23 @@ const Home: NextPage = () => {
     </>
   );
 
+  const totalFoodPrice = foods.reduce((acc, cur) => acc + cur.price, 0);
+  const spendMem = members.filter((mem) => mem.price > 0).length;
+
   return (
     <Container className="p-3">
       <Card className="p-3 mb-2">
-        <h2>ราคาอาหารรวม : </h2>
-        <h2>จำนวนคน : </h2>
+        <h2>ราคาอาหารรวม : {totalFoodPrice}</h2>
+        <h2>จำนวนคน : {spendMem}</h2>
       </Card>
-
-      <Modal show={isOpen} onHide={onHideModal}>
-        <Modal.Body>
-          <h1>{message}</h1>
-          <FormControl
-            value={price}
-            onChange={(e) => setPrice(Number.parseFloat(e.target.value))}
-            type="number"
-            placeholder="ราคา"
-          />
-          <div className="p-2">
-            <h4>เลือกคนจ่าย</h4>
-            <div className="d-flex">
-              {selectMember.map((member) => (
-                <SelectMember
-                  key={member.id}
-                  select={member.select}
-                  onSelect={() => onSelectMember(member.id)}
-                  name={member.name}
-                />
-              ))}
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            disabled={!price || isNaN(price) || selectMember.filter(s=>s.select).length === 0}
-            variant="primary"
-            onClick={addFood}
-          >
-            เพิ่ม
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
+      <AddFoodModal
+        visible={isOpen}
+        onAddFood={addFood}
+        onHideModal={close}
+        selectMember={selectMember}
+        onSelectMember={onSelectMember}
+        foodName={foodName}
+      />
       <Nav variant="tabs">
         <Nav.Item>
           <Nav.Link

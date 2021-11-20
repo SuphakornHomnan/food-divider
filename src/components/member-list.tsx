@@ -9,8 +9,10 @@ const MemberList: React.FC<MemberListProps> = ({ members }) => {
   return (
     <Table borderless bordered responsive="sm" className="my-4">
       <thead>
-        <th>รายชื่อ</th>
-        <th>จ่าย</th>
+        <tr>
+          <th>รายชื่อ</th>
+          <th>จ่าย</th>
+        </tr>
       </thead>
       <tbody>
         {members.map((member) => (
