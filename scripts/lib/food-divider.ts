@@ -42,6 +42,14 @@ export class FoodDivider {
     return this.members.find((obj) => obj.id === memberID);
   } //
 
+  public getFoodList(foodIDList: number[]): Food[] {
+    return this.foods.filter((food) => foodIDList.includes(food.id));
+  } //
+
+  public getMemberList(memberIDList: number[]): Member[] {
+    return this.members.filter((member) => memberIDList.includes(member.id));
+  } //
+
   public updateFoodDetailByID(
     foodID: number,
     name?: string,
@@ -100,7 +108,9 @@ export class FoodDivider {
   public calculate(): Member[] {
     const priceMembers: { [key: number]: number } = {};
     this.foods.forEach((food) => {
-      if(food.memberIDs.length === 0){ throw new Error('food must has a member!') }
+      if (food.memberIDs.length === 0) {
+        throw new Error("food must has a member!");
+      }
       const pricePerMember: number = food.price / food.memberIDs.length;
       food.memberIDs.forEach((memberID) => {
         priceMembers[memberID] = priceMembers[memberID]
