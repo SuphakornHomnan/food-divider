@@ -57,9 +57,7 @@ export class FoodDivider {
     const food = this.getFood(foodID);
     if (food && this.getMember(memberID)) {
       if (!food.memberIDs.find((id) => id === memberID)) {
-        const targetIndex = this.foods.indexOf(
-          this.foods.find((food) => food.id === foodID)!
-        );
+        const targetIndex = this.foods.findIndex((food) => food.id === foodID);
         this.foods[targetIndex].memberIDs.push(memberID);
       }
     }
@@ -69,10 +67,7 @@ export class FoodDivider {
     const food = this.getFood(foodID);
     if (food && this.getMember(memberID)) {
       if (food.memberIDs.find((id) => id === memberID)) {
-        const targetIndex = this.foods.indexOf(
-          this.foods.find((food) => food.id === foodID)!
-        );
-
+        const targetIndex = this.foods.findIndex((food) => food.id === foodID);
         this.foods[targetIndex].memberIDs = this.foods[
           targetIndex
         ].memberIDs.filter((memID) => memID !== memberID);
@@ -112,9 +107,7 @@ export class FoodDivider {
     });
 
     Object.keys(priceMembers).forEach((key) => {
-      const targetIndex = this.members.indexOf(
-        this.members.find((member) => member.id.toString() === key)!
-      );
+      const targetIndex = this.members.findIndex((member) => member.id.toString() === key);
       this.members[targetIndex].price = priceMembers[Number.parseInt(key, 10)];
     });
 
