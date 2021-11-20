@@ -1,19 +1,10 @@
 import type { NextPage } from "next";
 import React, { useState } from "react";
-import {
-  Modal,
-  Button,
-  FormControl,
-  Card,
-  Container,
-  Row,
-  Col,
-  Form,
-  Nav,
-} from "react-bootstrap";
+import { Card, Container, Nav } from "react-bootstrap";
 import FoodForm from "../src/components/food-form";
 import FoodList, { Member } from "../src/components/food-list";
-import { useModal } from "../src/hooks/use-modal";
+import MemberForm from "../src/components/member-form";
+import MemberList from "../src/components/member-list";
 import { useFoodStore } from "../src/hooks/useFoodStore";
 
 enum Navs {
@@ -23,13 +14,8 @@ enum Navs {
 
 const Home: NextPage = () => {
   const [active, setActive] = useState<Navs>(Navs.foods);
-  const [openAddMember, closeAddMember, addMemberCtx] = useModal(false);
 
   const { foods, addFoods, members, createMember } = useFoodStore();
-
-  const onAddFood = () => {
-    addFoods(addMemberCtx.message, 100);
-  };
 
   const renderFoodTab = () => (
     <>
@@ -40,9 +26,10 @@ const Home: NextPage = () => {
 
   const renderMemberTab = () => (
     <>
-    add member
+      <MemberList members={members} />
+      <MemberForm onSubmit={createMember} />
     </>
-  )
+  );
 
   return (
     <Container className="p-3">
