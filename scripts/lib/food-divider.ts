@@ -90,7 +90,7 @@ export class FoodDivider {
 
   public deleteMemberByID(memberID: number): void {
     if (this.getMember(memberID)) {
-      this.members.filter((obj) => obj.id !== memberID);
+      this.members = this.members.filter((obj) => obj.id !== memberID);
       this.foods.map((food) =>
         food.memberIDs.splice(food.memberIDs.indexOf(memberID), 1)
       );
@@ -100,14 +100,19 @@ export class FoodDivider {
   public calculate(): Member[] {
     const priceMembers: { [key: number]: number } = {};
     this.foods.forEach((food) => {
+      if(food.memberIDs.length === 0){ throw new Error('food must has a member!') }
       const pricePerMember: number = food.price / food.memberIDs.length;
       food.memberIDs.forEach((memberID) => {
-        priceMembers[memberID] = pricePerMember;
+        priceMembers[memberID] = priceMembers[memberID]
+          ? priceMembers[memberID] + pricePerMember
+          : pricePerMember;
       });
     });
 
     Object.keys(priceMembers).forEach((key) => {
-      const targetIndex = this.members.findIndex((member) => member.id.toString() === key);
+      const targetIndex = this.members.findIndex(
+        (member) => member.id.toString() === key
+      );
       this.members[targetIndex].price = priceMembers[Number.parseInt(key, 10)];
     });
 
