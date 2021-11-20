@@ -1,58 +1,83 @@
 import type { NextPage } from "next";
 import React, { useState } from "react";
-import { Modal, Button, FormControl, Card } from "react-bootstrap";
-import { useModal } from "../src/hook/use-modal";
-import styles from "../styles/Home.module.css";
+import {
+  Modal,
+  Button,
+  FormControl,
+  Card,
+  Container,
+  Row,
+  Col,
+  Form,
+} from "react-bootstrap";
+import FoodForm from "../src/components/food-form";
+import FoodList, { Member } from "../src/components/food-list";
+import { useModal } from "../src/hooks/use-modal";
+import { useFoodStore } from "../src/hooks/useFoodStore";
 
 const Home: NextPage = () => {
-  const [visible, open, close] = useModal(false);
-  const [data, setData] = useState<string>("");
-  const [list, setList] = useState<string[]>([]);
+  const [{ visible, message }, open, close] = useModal(false);
+  const [name, setName] = useState<string>("");
 
-  const addInput = () => {
-    setList([...list, data]);
-    setData("");
+  const { foods, addFoods, members, createMember } = useFoodStore();
+
+  const addInput = (e) => {
+    e.preventDefault();
+    createMember(name);
+    setName("");
   };
 
+  const onAddFood = () => {
+    addFoods(message, 100);
+  };
   return (
-    <div>
-      <button type="submit" onClick={open}>
-        Name
-      </button>
+    <Container className="p-3">
+      <Card className="p-3">
+        <h1>Summary</h1>
+        <h2>ราคาอาหารรวม : </h2>
+        <h2>จำนวนคน : </h2>
+      </Card>
+
+      <FoodList foods={foods} />
+
+      <FoodForm onSubmit={(foodName) => open(foodName)} />
+
       <Modal show={visible} onHide={close}>
         <Modal.Header closeButton>
           <Modal.Title>Add Members</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ padding: 10 }}>
-          name
-          <div>
-            {list.map((each, index) => {
-              return (
-                <Card style={{ marginBottom: 10 }} body key={index}>
-                  {each} <Button variant='danger'>X</Button>
-                </Card>
-              );
-            })}
-            <FormControl
-              style={{ marginBottom: 10 }}
-              placeholder="กรอกชื่อ"
-              value={data}
-              onChange={(e) => setData(e.target.value as string)}
-            />
-            <Button onClick={addInput}>+</Button>
+          <div className="mb-3">
+            {members.map((menber) => (
+              <Member key={menber.id} name={menber.name} />
+            ))}
           </div>
+          <Form onSubmit={addInput}>
+            <Row>
+              <Col xs={9}>
+                <FormControl
+                  style={{ marginBottom: 10 }}
+                  placeholder="กรอกชื่อ"
+                  value={name}
+                  onChange={(e) => setName(e.target.value as string)}
+                />
+              </Col>
+              <Col>
+                <Button disabled={!name} type="submit">
+                  +
+                </Button>
+              </Col>
+            </Row>
+          </Form>
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={close}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={close}>
-            Save Changes
+          <Button variant="primary" onClick={onAddFood}>
+            บันทึก
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </Container>
   );
 };
 
