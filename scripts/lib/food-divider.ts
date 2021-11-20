@@ -24,8 +24,8 @@ export class FoodDivider {
     return food;
   } //
 
-  public createMember(name: string): void {
-    this.members.push({ name, price: 0, id: this.members.length });
+  public createMember(name: string, color: string): void {
+    this.members.push({ name, price: 0, id: this.members.length, color });
   } //
 
   public getFoods(): Food[] {

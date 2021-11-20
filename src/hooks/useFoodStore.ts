@@ -17,8 +17,8 @@ export function useFoodStore() {
     return created;
   };
 
-  const createMember = (name: string) => {
-    FoodDividerStore.createMember(name);
+  const createMember = (name: string, color: string) => {
+    FoodDividerStore.createMember(name, color);
     updateMembers();
   };
 
