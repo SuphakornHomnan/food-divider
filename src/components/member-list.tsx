@@ -17,7 +17,10 @@ const MemberList: React.FC<MemberListProps> = ({ members }) => {
       <tbody>
         {members.map((member) => (
           <tr key={member.id}>
-            <td>{member.name}</td>
+            <td style={{ background: member.color, opacity: 0.5  }}>
+              {member.name}
+              
+            </td>
             <td>{Math.ceil(member.price)} บาท</td>
           </tr>
         ))}
