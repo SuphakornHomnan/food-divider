@@ -42,11 +42,11 @@ export class FoodDivider {
     return this.members.find((obj) => obj.id === memberID);
   } //
 
-  public getFoodsList(foodIDList: number[]): Food[] {
+  public getFoodList(foodIDList: number[]): Food[] {
     return this.foods.filter((food) => foodIDList.includes(food.id));
   } //
 
-  public getMembersList(memberIDList: number[]): Member[] {
+  public getMemberList(memberIDList: number[]): Member[] {
     return this.members.filter((member) => memberIDList.includes(member.id));
   } //
 
