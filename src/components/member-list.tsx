@@ -16,7 +16,7 @@ const MemberList: React.FC<MemberListProps> = ({ members }) => {
         {members.map((member) => (
           <tr key={member.id}>
             <td>{member.name}</td>
-            <td>{member.price} บาท</td>
+            <td>{Math.ceil(member.price)} บาท</td>
           </tr>
         ))}
       </tbody>

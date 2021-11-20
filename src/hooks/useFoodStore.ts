@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Food } from "../../scripts/dto/food-dto";
 import { Member } from "../../scripts/dto/member-dto";
 import { FoodDivider } from "../../scripts/lib/food-divider";
@@ -8,14 +8,37 @@ export function useFoodStore() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
 
-  const addFoods = (name: string, price: number) => {
-    FoodDividerStore.createFood(name, price);
-    setFoods([...FoodDividerStore.getFoods()]);
+  const updateFoods = () => setFoods([...FoodDividerStore.getFoods()]);
+  const updateMembers = () => setMembers([...FoodDividerStore.getMembers()]);
+
+  const addFoods = (name: string, price: number): Food => {
+    const created = FoodDividerStore.createFood(name, price);
+    updateFoods();
+    return created;
   };
 
   const createMember = (name: string) => {
     FoodDividerStore.createMember(name);
-    setMembers([...FoodDividerStore.getMembers()]);
+    updateMembers();
+  };
+
+  const addMemberToFood = (foodID: number, memberID: number) => {
+    FoodDividerStore.addMemberToFoods(foodID, memberID);
+    updateFoods();
+  };
+
+  const removeMemberFromFoods = (foodID: number, memberID: number) => {
+    FoodDividerStore.removeMemberFromFoods(foodID, memberID);
+    updateFoods();
+  };
+
+  const getMemberList = (memberIDs: number[]) =>
+    FoodDividerStore.getMemberList(memberIDs);
+
+  const calculate = () => {
+    FoodDividerStore.calculate();
+    updateFoods();
+    updateMembers();
   };
 
   return {
@@ -23,5 +46,9 @@ export function useFoodStore() {
     addFoods,
     createMember,
     members,
+    addMemberToFood,
+    removeMemberFromFoods,
+    getMemberList,
+    calculate,
   };
 }

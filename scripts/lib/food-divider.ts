@@ -18,8 +18,10 @@ export class FoodDivider {
     return FoodDivider.instance;
   }
 
-  public createFood(name: string, price: number): void {
-    this.foods.push({ name, price, memberIDs: [], id: this.foods.length });
+  public createFood(name: string, price: number): Food {
+    const food = { name, price, memberIDs: [], id: this.foods.length };
+    this.foods.push(food);
+    return food;
   } //
 
   public createMember(name: string): void {
