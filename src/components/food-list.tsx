@@ -3,8 +3,13 @@ import { Badge, Table } from "react-bootstrap";
 import { Food } from "../../scripts/dto/food-dto";
 import { useFoodStore } from "../hooks/useFoodStore";
 
-export const Member: React.FC<{ name: string; color: string }> = ({ name, color }) => (
-  <Badge style={{ marginRight: 5, backgroundColor: color }}>{name}</Badge>
+export const Member: React.FC<{ name: string; color: string }> = ({
+  name,
+  color,
+}) => (
+  <Badge style={{ marginRight: 5 ,background:color }} bg="">
+    {name}
+  </Badge>
 );
 
 interface FoodListProps {
@@ -30,7 +35,11 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
             <td>{food.price} บาท</td>
             <td>
               {getMemberList(food.memberIDs).map((member) => (
-                <Member key={member.id} name={member.name} color={member.color} />
+                <Member
+                  key={member.id}
+                  name={member.name}
+                  color={member.color}
+                />
               ))}
             </td>
           </tr>

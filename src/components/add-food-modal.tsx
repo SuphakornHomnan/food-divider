@@ -28,7 +28,7 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
     }
     return "";
   };
-  
+
   return (
     <Modal
       show={visible}
@@ -49,7 +49,10 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
         />
         <div className="p-2">
           <h4>เลือกคนจ่าย</h4>
-          <div className="d-flex">
+          <div
+            className="d-flex flex-wrap"
+            style={{ justifyContent: "space-between", marginBottom: 10 }}
+          >
             {selectMember.map((member) => (
               <SelectMember
                 key={member.id}
