@@ -7,12 +7,15 @@ import FoodForm from "../src/components/food-form";
 import FoodList from "../src/components/food-list";
 import MemberForm from "../src/components/member-form";
 import MemberList from "../src/components/member-list";
+import DonateTyping from "../src/components/donate-typing";
+
 import { useModal } from "../src/hooks/use-modal";
 import { useFoodStore } from "../src/hooks/useFoodStore";
 
 enum Navs {
   foods = "foods",
   members = "members",
+  donate = "donate",
 }
 
 export interface SelectMember extends MemberType {
@@ -73,6 +76,12 @@ const Home: NextPage = () => {
     </>
   );
 
+  const renderDonateTab = () => (
+    <>
+      <DonateTyping />
+    </>
+  );
+
   const totalFoodPrice = foods.reduce((acc, cur) => acc + cur.price, 0);
   const spendMem = members.filter((mem) => mem.price > 0).length;
 
@@ -107,8 +116,20 @@ const Home: NextPage = () => {
             คนจ่าย
           </Nav.Link>
         </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            onClick={() => setActive(Navs.donate)}
+            active={active === Navs.donate}
+          >
+            บริจาค
+          </Nav.Link>
+        </Nav.Item>
       </Nav>
-      {active === Navs.foods ? renderFoodTab() : renderMemberTab()}
+      {active === Navs.foods
+        ? renderFoodTab()
+        : active === Navs.members
+        ? renderMemberTab()
+        : renderDonateTab()}
     </Container>
   );
 };
