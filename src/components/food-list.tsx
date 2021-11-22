@@ -27,6 +27,7 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
         </tr>
       </thead>
       <tbody>
+        {foods.length === 0 && <span style={{color:'#6d6d6d'}}>ไม่มีข้อมูล</span> }
         {foods.map((food) => (
           <tr key={food.id}>
             <td>
