@@ -1,1 +1,8 @@
-export const randomColor = () => "#" + ((1<<24)*Math.random() | 0).toString(16)
+export const randomColor = () =>
+  "hsl(" +
+  360 * Math.random() +
+  "," +
+  (25 + 70 * Math.random()) +
+  "%," +
+  (85 + 10 * Math.random()) +
+  "%)";

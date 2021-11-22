@@ -57,6 +57,7 @@ const Home: NextPage = () => {
     <>
       <FoodList foods={foods} />
       <FoodForm
+        hasMember={members.length > 0}
         onSubmit={(foodName) => {
           open(foodName);
           setSelectMember(members.map((m) => ({ ...m, select: false })));

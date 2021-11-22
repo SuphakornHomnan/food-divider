@@ -7,7 +7,7 @@ export const Member: React.FC<{ name: string; color: string }> = ({
   name,
   color,
 }) => (
-  <Badge style={{ marginRight: 5 ,background:color }} bg="">
+  <Badge style={{ marginRight: 5, background: color, color: "#000" }} bg="">
     {name}
   </Badge>
 );
@@ -41,6 +41,7 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
                   color={member.color}
                 />
               ))}
+              <div>คนละ : {Math.ceil(food.price / food.memberIDs.length)}</div>
             </td>
           </tr>
         ))}

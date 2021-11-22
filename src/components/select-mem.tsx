@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
+import { Col, Row } from "react-bootstrap";
+import { Check, Plus } from "react-feather";
+import { Member } from "../../scripts/dto/member-dto";
 
 interface SelectMemberProps {
-  name?: string;
+  member: Member;
   select?: boolean;
   onSelect?: () => void;
 }
 
 const SelectMember: React.FC<SelectMemberProps> = ({
-  name,
+  member,
   select = false,
   onSelect = () => {},
 }) => {
   return (
-    <div
+    <Row
+      xs={4}
       onClick={onSelect}
-      className={`rounded bg-${
-        !select ? "secondary" : "success"
-      } text-white p-2 px-4 mx-1 cursor-pointer`}
+      className="rounded cursor-pointer"
+      style={{
+        background: !select ? "#f5f5f5" : member.color,
+      }}
     >
-      {name}
-    </div>
+      <Col xs={1}>{select ? <Check size={12} /> : <Plus size={12} />}</Col>
+      <Col xs={3}>{member.name}</Col>
+    </Row>
   );
 };
 
