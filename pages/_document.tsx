@@ -32,7 +32,7 @@ class MyDocument extends Document {
           />
           <meta name="msapplication-TileColor" content="#2B5797" />
           <meta name="msapplication-tap-highlight" content="no" />
-          <meta name="theme-color" content="#ff8d0a" />
+          <meta name="theme-color" content="#FAC531" />
 
           <link rel="apple-touch-icon" href="/icons/touch-icon-iphone.png" />
           <link
@@ -51,18 +51,8 @@ class MyDocument extends Document {
             href="/icons/touch-icon-ipad-retina.png"
           />
 
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/vercel.svg"
-          />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/vercel.svg"
-          />
+          <link rel="icon" type="image/png" sizes="32x32" href="/vercel.svg" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/vercel.svg" />
           <link rel="manifest" href="/manifest.json" />
           <link
             rel="mask-icon"
@@ -71,8 +61,8 @@ class MyDocument extends Document {
           />
           <link rel="shortcut icon" href="/favicon.ico" />
           <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=optional"
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
         </Head>
         <body>
