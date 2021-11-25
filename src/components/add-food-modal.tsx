@@ -8,7 +8,7 @@ interface AddFoodModalProps {
   onAddFood?: (price: number) => void;
   onHideModal?: () => void;
   foodName?: string;
-  onSelectMember?: (id: number) => void;
+  onSelectMember?: (id: number, selectAll?: boolean) => void;
   selectMember?: SelectMemberType[];
 }
 
@@ -29,8 +29,8 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
     return "";
   };
 
-  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     onAddFood(price as number);
     setPrice("");
   };
@@ -39,7 +39,7 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
     <Modal
       show={visible}
       onHide={() => {
-        setPrice(0);
+        setPrice("");
         onHideModal();
       }}
     >
@@ -54,8 +54,8 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
             type="number"
             placeholder="ราคา"
           />
+          <h4 className="mt-4">เลือกคนจ่าย</h4>
           <div className="p-2">
-            <h4>เลือกคนจ่าย</h4>
             <Row xs={3}>
               {selectMember.map((member) => (
                 <Col
@@ -71,6 +71,14 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
               ))}
             </Row>
           </div>
+          <Button
+            onClick={() =>
+              selectMember.forEach((mem) => onSelectMember(mem.id, true))
+            }
+            variant="primary"
+          >
+            เลือกทั้งหมด
+          </Button>
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -79,7 +87,7 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
               isNaN(price as number) ||
               selectMember.filter((s) => s.select).length === 0
             }
-            variant="primary"
+            variant="success"
             type="submit"
           >
             เพิ่ม

@@ -18,7 +18,7 @@ const SelectMember: React.FC<SelectMemberProps> = ({
     <Row
       xs={4}
       onClick={onSelect}
-      className="rounded cursor-pointer"
+      className="rounded cursor-pointer py-2"
       style={{
         background: !select ? "#f5f5f5" : member.color,
       }}

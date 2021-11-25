@@ -87,6 +87,8 @@ export class FoodDivider {
 
   public clearFood(): void {
     this.foods = [];
+    this.members = this.members.map((mem) => ({ ...mem, price: 0 }));
+    this.calculate();
   } //
 
   public clearMember(): void {

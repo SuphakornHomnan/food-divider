@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Button, FormControl, Row, Form } from "react-bootstrap";
+import { Col, Button, FormControl, Row, Form, Alert } from "react-bootstrap";
 
 interface FoodFormProps {
   onSubmit?: (value: string) => void;
@@ -12,7 +12,6 @@ const FoodForm: React.FC<FoodFormProps> = ({
   const [value, setValue] = useState("");
   return (
     <>
-      {!hasMember && <span style={{ color: "red" }}>*กรุณาเพิ่มคนจ่ายก่อน</span>}
       <Form
         onSubmit={(e) => {
           e.preventDefault();
@@ -35,6 +34,7 @@ const FoodForm: React.FC<FoodFormProps> = ({
           </Col>
         </Row>
       </Form>
+      {!hasMember && <Alert variant="danger">*กรุณาเพิ่มคนจ่ายก่อน</Alert>}
     </>
   );
 };

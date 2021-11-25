@@ -7,7 +7,7 @@ interface MemberListProps {
 }
 const MemberList: React.FC<MemberListProps> = ({ members }) => {
   return (
-    <Table borderless bordered responsive="sm" className="my-4">
+    <Table borderless responsive="sm" className="my-4">
       <thead>
         <tr>
           <th>รายชื่อ</th>
@@ -17,7 +17,7 @@ const MemberList: React.FC<MemberListProps> = ({ members }) => {
       <tbody>
         {members.map((member) => (
           <tr key={member.id}>
-            <td style={{ background: member.color }}>{member.name}</td>
+            <td style={{ color: member.color }}>{member.name}</td>
             <td>{Math.ceil(member.price)} บาท</td>
           </tr>
         ))}

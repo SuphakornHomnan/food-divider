@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Table } from "react-bootstrap";
+import { Alert, Badge, Table } from "react-bootstrap";
 import { Food } from "../../scripts/dto/food-dto";
 import { useFoodStore } from "../hooks/useFoodStore";
 
@@ -18,7 +18,7 @@ interface FoodListProps {
 const FoodList: React.FC<FoodListProps> = ({ foods }) => {
   const { getMemberList } = useFoodStore();
   return (
-    <Table borderless bordered responsive="sm" className="my-4">
+    <Table borderless responsive="sm" className="my-4">
       <thead>
         <tr>
           <th>รายการอาหาร</th>
@@ -27,7 +27,15 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
         </tr>
       </thead>
       <tbody>
-        {foods.length === 0 && <span style={{color:'#6d6d6d'}}>ไม่มีข้อมูล</span> }
+        {foods.length === 0 && (
+          <tr>
+            <td colSpan={3}>
+              <Alert style={{ width: "100%" }} variant="secondary">
+                ไม่มีข้อมูล
+              </Alert>
+            </td>
+          </tr>
+        )}
         {foods.map((food) => (
           <tr key={food.id}>
             <td>

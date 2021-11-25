@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import React, { useState } from "react";
-import { Card, Container, Nav } from "react-bootstrap";
+import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
 import { Member as MemberType } from "../scripts/dto/member-dto";
 import AddFoodModal from "../src/components/add-food-modal";
 import FoodForm from "../src/components/food-form";
@@ -33,6 +33,8 @@ const Home: NextPage = () => {
     addMemberToFood,
     removeMemberFromFoods,
     calculate,
+    clearFood,
+    debug,
   } = useFoodStore();
 
   const [selectMember, setSelectMember] = useState<SelectMember[]>([]);
@@ -50,9 +52,11 @@ const Home: NextPage = () => {
     close();
   };
 
-  const onSelectMember = (id: number) => {
+  const onSelectMember = (id: number, selectAll: boolean = false) => {
     setSelectMember((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, select: !m.select } : m))
+      prev.map((m) =>
+        m.id === id ? { ...m, select: selectAll ? true : !m.select } : m
+      )
     );
   };
 
@@ -66,6 +70,14 @@ const Home: NextPage = () => {
           setSelectMember(members.map((m) => ({ ...m, select: false })));
         }}
       />
+      <Button
+        onClick={clearFood}
+        disabled={foods.length === 0}
+        variant="danger"
+      >
+        ล้างรายการ
+      </Button>
+      <Button variant='dark' onClick={debug}>debug</Button>
     </>
   );
 
@@ -87,10 +99,16 @@ const Home: NextPage = () => {
 
   return (
     <Container className="p-3">
-      <Card className="p-3 mb-2">
-        <h2>ราคาอาหารรวม : {totalFoodPrice}</h2>
-        <h2>จำนวนคน : {spendMem}</h2>
-      </Card>
+      <Row>
+        <Col>
+          <h2>จำนวนคน</h2>
+          <h1>{spendMem}</h1>
+        </Col>
+        <Col>
+          <h2>ราคาอาหารรวม</h2>
+          <h1>{totalFoodPrice}</h1>
+        </Col>
+      </Row>
       <AddFoodModal
         visible={isOpen}
         onAddFood={addFood}
