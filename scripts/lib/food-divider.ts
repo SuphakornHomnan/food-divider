@@ -69,6 +69,7 @@ export class FoodDivider {
       if (!food.memberIDs.find((id) => id === memberID)) {
         const targetIndex = this.foods.findIndex((food) => food.id === foodID);
         this.foods[targetIndex].memberIDs.push(memberID);
+        this.calculate()
       }
     }
   } //

@@ -11,6 +11,7 @@ import DonateTyping from "../src/components/donate-typing";
 
 import { useModal } from "../src/hooks/use-modal";
 import { useFoodStore } from "../src/hooks/useFoodStore";
+import { GenerateQRCode } from "../src/components/generate-qrcode-promptpay";
 
 enum Navs {
   foods = "foods",
@@ -23,7 +24,7 @@ export interface SelectMember extends MemberType {
 }
 
 const Home: NextPage = () => {
-  const [active, setActive] = useState<Navs>(Navs.foods);
+  const [active, setActive] = useState<Navs>(Navs.members);
 
   const {
     foods,
@@ -108,6 +109,9 @@ const Home: NextPage = () => {
           <h2>ราคาอาหารรวม</h2>
           <h1>{totalFoodPrice}</h1>
         </Col>
+        <Col>
+            <GenerateQRCode inputNumber="0987637086" />
+          </Col>
       </Row>
       <AddFoodModal
         visible={isOpen}
@@ -120,18 +124,18 @@ const Home: NextPage = () => {
       <Nav variant="tabs">
         <Nav.Item>
           <Nav.Link
-            onClick={() => setActive(Navs.foods)}
-            active={active === Navs.foods}
-          >
-            รายการอาหาร
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
             onClick={() => setActive(Navs.members)}
             active={active === Navs.members}
           >
             คนจ่าย
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            onClick={() => setActive(Navs.foods)}
+            active={active === Navs.foods}
+          >
+            รายการอาหาร
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
