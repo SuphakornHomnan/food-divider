@@ -14,6 +14,7 @@ import { useFoodStore } from "../src/hooks/useFoodStore";
 import { GenerateQRCode } from "../src/components/generate-qrcode-promptpay";
 import reducer, { initialState } from "../src/scripts/lib/reducer";
 import { Actions, ActionTypes, State } from "../src/scripts/lib/types";
+import { CreateMenu } from "../src/scripts/dto/menu-dto";
 
 enum Navs {
   foods = "foods",
@@ -49,13 +50,15 @@ const Home: NextPage = () => {
   const [open, close, { isOpen, message: foodName }] = useModal();
 
   const addFood = (price: number) => {
-    const food = addFoods(foodName, price);
-    selectMember
+    const memberIDs = selectMember
       .filter((mem) => mem.select)
-      .forEach((mem) => {
-        addMemberToFood(food.id, mem.id);
-      });
-    calculate();
+      .map((member) => member.id);
+    const payload: CreateMenu = {
+      name: foodName,
+      price,
+      memberIDs,
+    };
+    dispatch({ type: Actions.ADD_MENU, payload });
     close();
   };
 
@@ -69,12 +72,12 @@ const Home: NextPage = () => {
 
   const renderFoodTab = () => (
     <>
-      <FoodList foods={foods} />
+      <FoodList foods={state.menus} />
       <FoodForm
-        hasMember={members.length > 0}
+        hasMember={state.members.length > 0}
         onSubmit={(foodName) => {
           open(foodName);
-          setSelectMember(members.map((m) => ({ ...m, select: false })));
+          setSelectMember(state.members.map((m) => ({ ...m, select: false })));
         }}
       />
       <Button
@@ -92,8 +95,12 @@ const Home: NextPage = () => {
 
   const renderMemberTab = () => (
     <>
-      <MemberList members={members} />
-      <MemberForm onSubmit={createMember} />
+      <MemberList members={state.members} />
+      <MemberForm
+        onSubmit={(name, color) =>
+          dispatch({ type: Actions.ADD_MEMBER, payload: { name, color } })
+        }
+      />
     </>
   );
 

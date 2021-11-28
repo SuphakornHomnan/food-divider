@@ -1,5 +1,5 @@
 import { Reducer } from "react";
-import { addMenu, increaseFunction } from "./actions";
+import { addMember, addMenu, increaseFunction } from "./actions";
 import { Actions, ActionTypes, State } from "./types";
 
 export const initialState: State = {
@@ -17,13 +17,10 @@ const reducer: Reducer<State, ActionTypes> = (state, action) => {
         ...state,
         counter: state.counter - 1,
       };
-    case Actions.SET:
-      return {
-        ...state,
-        counter: action.payload,
-      };
     case Actions.ADD_MENU:
       return addMenu(state, action.payload);
+    case Actions.ADD_MEMBER:
+      return addMember(state, action.payload);
     default:
       throw new Error();
   }

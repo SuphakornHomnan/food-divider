@@ -4,3 +4,8 @@ export type Member = {
   price: number;
   color: string;
 };
+
+export type CreateMember = {
+  name: string;
+  color: string;
+};

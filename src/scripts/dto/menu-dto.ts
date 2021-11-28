@@ -8,4 +8,10 @@ export type Menu = {
 export type CreateMenu = {
   name: string;
   price: number;
+  memberIDs: number[];
+};
+
+export type AddMembersToMenu = {
+  menuID: number;
+  memberIDs: number[];
 };

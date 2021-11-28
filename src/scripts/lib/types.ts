@@ -1,22 +1,22 @@
 import { CreateMenu, Menu } from "../dto/menu-dto";
-import { Member } from "../dto/member-dto";
+import { CreateMember, Member } from "../dto/member-dto";
 
 export type State = {
   counter: number;
-  menus: Array<Menu>;
-  members: Array<Member>;
+  menus: Menu[];
+  members: Member[];
 };
 
 export enum Actions {
   INCREASE = "INCREASE",
   DECREASE = "DECREASE",
-  SET = "SET",
   ADD_MENU = "ADD_MENU",
+  ADD_MEMBER = "ADD_MEMBER",
 }
 
 type INCREASE = { type: Actions.INCREASE };
 type DECREASE = { type: Actions.DECREASE };
-type SET = { type: Actions.SET; payload: number };
 type ADD_MENU = { type: Actions.ADD_MENU; payload: CreateMenu };
+type ADD_MEMBER = { type: Actions.ADD_MEMBER; payload: CreateMember };
 
-export type ActionTypes = INCREASE | DECREASE | SET | ADD_MENU;
+export type ActionTypes = INCREASE | DECREASE | ADD_MENU | ADD_MEMBER;
