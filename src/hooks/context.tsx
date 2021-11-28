@@ -1,10 +1,10 @@
-import { useReducer, createContext, Dispatch, useContext } from "react";
+import { useReducer, createContext, useContext } from "react";
 import reducer, { initialState } from "../scripts/lib/reducer";
 import { ActionTypes, State } from "../scripts/lib/types";
 
 interface StateContextType {
   state: State;
-  dispatch: Dispatch<ActionTypes>;
+  dispatch: React.Dispatch<ActionTypes>;
 }
 const StateContext = createContext<StateContextType | null>(null);
 
