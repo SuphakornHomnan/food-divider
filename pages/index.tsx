@@ -5,16 +5,15 @@ import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 import { Member as MemberType } from "../src/scripts/dto/member-dto";
 import AddFoodModal from "../src/components/add-food-modal";
 import FoodForm from "../src/components/food-form";
-import FoodList from "../src/components/food-list";
+import MenuList from "../src/components/menu-list";
 import MemberForm from "../src/components/member-form";
 import MemberList from "../src/components/member-list";
 import DonateTyping from "../src/components/donate-typing";
 import { useModal } from "../src/hooks/use-modal";
-import { useFoodStore } from "../src/hooks/useFoodStore";
 import { GenerateQRCode } from "../src/components/generate-qrcode-promptpay";
-import reducer, { initialState } from "../src/scripts/lib/reducer";
-import { Actions, ActionTypes, State } from "../src/scripts/lib/types";
+import { Actions } from "../src/scripts/lib/types";
 import { CreateMenu } from "../src/scripts/dto/menu-dto";
+import { useStateContext } from "../src/hooks/context";
 
 enum Navs {
   foods = "foods",
@@ -27,34 +26,20 @@ export interface SelectMember extends MemberType {
 }
 
 const Home: NextPage = () => {
-  const [state, dispatch] = useReducer<React.Reducer<State, ActionTypes>>(
-    reducer,
-    initialState
-  );
-  const [active, setActive] = useState<Navs>(Navs.members);
+  const { state, dispatch } = useStateContext();
 
-  const {
-    foods,
-    addFoods,
-    members,
-    createMember,
-    addMemberToFood,
-    removeMemberFromFoods,
-    calculate,
-    clearFood,
-    debug,
-  } = useFoodStore();
+  const [active, setActive] = useState<Navs>(Navs.members);
 
   const [selectMember, setSelectMember] = useState<SelectMember[]>([]);
 
-  const [open, close, { isOpen, message: foodName }] = useModal();
+  const [open, close, { isOpen, message: menuName }] = useModal();
 
   const addFood = (price: number) => {
     const memberIDs = selectMember
       .filter((mem) => mem.select)
       .map((member) => member.id);
     const payload: CreateMenu = {
-      name: foodName,
+      name: menuName,
       price,
       memberIDs,
     };
@@ -72,23 +57,20 @@ const Home: NextPage = () => {
 
   const renderFoodTab = () => (
     <>
-      <FoodList foods={state.menus} />
+      <MenuList menus={state.menus} />
       <FoodForm
         hasMember={state.members.length > 0}
-        onSubmit={(foodName) => {
-          open(foodName);
+        onSubmit={(menuName) => {
+          open(menuName);
           setSelectMember(state.members.map((m) => ({ ...m, select: false })));
         }}
       />
       <Button
-        onClick={() => dispatch({ type: Actions.INCREASE })}
-        // disabled={foods.length === 0}
+        onClick={() => null}
+        disabled={state.menus.length === 0}
         variant="danger"
       >
         ล้างรายการ
-      </Button>
-      <Button variant="dark" onClick={debug}>
-        debug
       </Button>
     </>
   );
@@ -110,19 +92,21 @@ const Home: NextPage = () => {
     </>
   );
 
-  const totalFoodPrice = foods.reduce((acc, cur) => acc + cur.price, 0);
-  const spendMem = members.filter((mem) => mem.price > 0).length;
+  const totalPrice = state.menus.reduce((acc, cur) => acc + cur.price, 0);
+  const spendMembersCount = state.members.filter(
+    (member) => member.price > 0
+  ).length;
 
   return (
     <Container className="p-3">
       <Row>
         <Col>
-          <h2>จำนวนคน</h2>
-          <h1>{state.counter}</h1>
+          <h2>จำนวนคนจ่าย</h2>
+          <h1>{spendMembersCount}</h1>
         </Col>
         <Col>
           <h2>ราคาอาหารรวม</h2>
-          <h1>{totalFoodPrice}</h1>
+          <h1>{totalPrice}</h1>
         </Col>
         <Col>
           <GenerateQRCode inputNumber="0987637086" />
@@ -134,7 +118,7 @@ const Home: NextPage = () => {
         onHideModal={close}
         selectMember={selectMember}
         onSelectMember={onSelectMember}
-        foodName={foodName}
+        menuName={menuName}
       />
       <Nav variant="tabs">
         <Nav.Item>

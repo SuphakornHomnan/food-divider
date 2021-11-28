@@ -7,7 +7,7 @@ interface AddFoodModalProps {
   visible?: boolean;
   onAddFood?: (price: number) => void;
   onHideModal?: () => void;
-  foodName?: string;
+  menuName?: string;
   onSelectMember?: (id: number, selectAll?: boolean) => void;
   selectMember?: SelectMemberType[];
 }
@@ -16,7 +16,7 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
   onAddFood = () => {},
   visible = false,
   onHideModal = () => {},
-  foodName,
+  menuName,
   onSelectMember = () => {},
   selectMember = [],
 }) => {
@@ -45,7 +45,7 @@ const AddFoodModal: React.FC<AddFoodModalProps> = ({
     >
       <Form onSubmit={onSubmit}>
         <Modal.Body>
-          <h1>{foodName}</h1>
+          <h1>{menuName}</h1>
           <FormControl
             value={price}
             onChange={({ target }) =>

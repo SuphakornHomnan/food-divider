@@ -43,14 +43,6 @@ const calculate = (state: State): Member[] => {
   return updatedPriceMember;
 };
 
-export const increaseFunction = (state: State): State => {
-  const nextState = state.counter + 1;
-  return {
-    ...state,
-    counter: nextState,
-  };
-};
-
 export const addMenu = (state: State, input: CreateMenu): State => {
   const { name, price, memberIDs } = input;
   const newMenu: Menu = {

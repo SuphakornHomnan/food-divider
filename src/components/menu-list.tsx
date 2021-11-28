@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert, Badge, Table } from "react-bootstrap";
+import { useStateContext } from "../hooks/context";
 import { Menu } from "../scripts/dto/menu-dto";
-import { useFoodStore } from "../hooks/useFoodStore";
 
 export const Member: React.FC<{ name: string; color: string }> = ({
   name,
@@ -12,11 +12,13 @@ export const Member: React.FC<{ name: string; color: string }> = ({
   </Badge>
 );
 
-interface FoodListProps {
-  foods: Menu[];
+interface MenuListProps {
+  menus: Menu[];
 }
-const FoodList: React.FC<FoodListProps> = ({ foods }) => {
-  const { getMemberList } = useFoodStore();
+const MenuList: React.FC<MenuListProps> = ({ menus }) => {
+  const { state } = useStateContext();
+  const getMemberList = (memberIDs: number[]) =>
+    state.members.filter((member) => memberIDs.includes(member.id));
   return (
     <Table borderless responsive="sm" className="my-4">
       <thead>
@@ -27,7 +29,7 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
         </tr>
       </thead>
       <tbody>
-        {foods.length === 0 && (
+        {menus.length === 0 && (
           <tr>
             <td colSpan={3}>
               <Alert style={{ width: "100%" }} variant="secondary">
@@ -36,21 +38,21 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
             </td>
           </tr>
         )}
-        {foods.map((food) => (
-          <tr key={food.id}>
+        {menus.map((menu) => (
+          <tr key={menu.id}>
             <td>
-              <div>{food.name}</div>
+              <div>{menu.name}</div>
             </td>
-            <td>{food.price} บาท</td>
+            <td>{menu.price} บาท</td>
             <td>
-              {getMemberList(food.memberIDs).map((member) => (
+              {getMemberList(menu.memberIDs).map((member) => (
                 <Member
                   key={member.id}
                   name={member.name}
                   color={member.color}
                 />
               ))}
-              <div>คนละ : {Math.ceil(food.price / food.memberIDs.length)}</div>
+              <div>คนละ : {Math.ceil(menu.price / menu.memberIDs.length)}</div>
             </td>
           </tr>
         ))}
@@ -59,4 +61,4 @@ const FoodList: React.FC<FoodListProps> = ({ foods }) => {
   );
 };
 
-export default FoodList;
+export default MenuList;
