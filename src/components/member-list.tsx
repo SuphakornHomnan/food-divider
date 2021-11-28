@@ -1,6 +1,6 @@
 import React from "react";
 import { Table } from "react-bootstrap";
-import { Member } from "../../scripts/dto/member-dto";
+import { Member } from "../scripts/dto/member-dto";
 
 interface MemberListProps {
   members: Member[];

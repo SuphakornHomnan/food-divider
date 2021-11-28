@@ -1,23 +1,19 @@
 import type { NextPage } from "next";
 import React, { useReducer, useState } from "react";
-import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
-import { Member as MemberType } from "../scripts/dto/member-dto";
+import { Button, Col, Container, Nav, Row } from "react-bootstrap";
+
+import { Member as MemberType } from "../src/scripts/dto/member-dto";
 import AddFoodModal from "../src/components/add-food-modal";
 import FoodForm from "../src/components/food-form";
 import FoodList from "../src/components/food-list";
 import MemberForm from "../src/components/member-form";
 import MemberList from "../src/components/member-list";
 import DonateTyping from "../src/components/donate-typing";
-
 import { useModal } from "../src/hooks/use-modal";
 import { useFoodStore } from "../src/hooks/useFoodStore";
 import { GenerateQRCode } from "../src/components/generate-qrcode-promptpay";
-import reducer, {
-  Actions,
-  ActionType,
-  initialState,
-  State,
-} from "../scripts/lib/reducer";
+import reducer, { initialState } from "../src/scripts/lib/reducer";
+import { Actions, ActionTypes, State } from "../src/scripts/lib/types";
 
 enum Navs {
   foods = "foods",
@@ -30,7 +26,7 @@ export interface SelectMember extends MemberType {
 }
 
 const Home: NextPage = () => {
-  const [state, dispatch] = useReducer<React.Reducer<State, ActionType>>(
+  const [state, dispatch] = useReducer<React.Reducer<State, ActionTypes>>(
     reducer,
     initialState
   );

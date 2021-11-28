@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Food } from "../../scripts/dto/food-dto";
-import { Member } from "../../scripts/dto/member-dto";
-import { FoodDivider } from "../../scripts/lib/food-divider";
+import { Food } from "../scripts/dto/food-dto";
+import { Member } from "../scripts/dto/member-dto";
+import { FoodDivider } from "../scripts/lib/food-divider";
 
 const FoodDividerStore = FoodDivider.getInstance();
 

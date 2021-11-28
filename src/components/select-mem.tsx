@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { Check, Plus } from "react-feather";
-import { Member } from "../../scripts/dto/member-dto";
+import { Member } from "../scripts/dto/member-dto";
 
 interface SelectMemberProps {
   member: Member;

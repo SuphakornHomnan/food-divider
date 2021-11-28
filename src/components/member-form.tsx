@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Button, FormControl, Row, Form } from "react-bootstrap";
-import { randomColor } from "../../scripts/lib/random-color";
+import { randomColor } from "../scripts/lib/random-color";
 
 interface MemberFormProps {
   onSubmit?: (name: string, color: string) => void;

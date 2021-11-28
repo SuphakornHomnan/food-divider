@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, Badge, Table } from "react-bootstrap";
-import { Food } from "../../scripts/dto/food-dto";
+import { Food } from "../scripts/dto/food-dto";
 import { useFoodStore } from "../hooks/useFoodStore";
 
 export const Member: React.FC<{ name: string; color: string }> = ({
