@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Food } from "../scripts/dto/food-dto";
+import { Menu } from "../scripts/dto/food-dto";
 import { Member } from "../scripts/dto/member-dto";
 import { FoodDivider } from "../scripts/lib/food-divider";
 
 const FoodDividerStore = FoodDivider.getInstance();
 
 export function useFoodStore() {
-  const [foods, setFoods] = useState<Food[]>([...FoodDividerStore.getFoods()]);
+  const [foods, setFoods] = useState<Menu[]>([...FoodDividerStore.getFoods()]);
   const [members, setMembers] = useState<Member[]>([
     ...FoodDividerStore.getMembers(),
   ]);
@@ -14,7 +14,7 @@ export function useFoodStore() {
   const updateFoods = () => setFoods([...FoodDividerStore.getFoods()]);
   const updateMembers = () => setMembers([...FoodDividerStore.getMembers()]);
 
-  const addFoods = (name: string, price: number): Food => {
+  const addFoods = (name: string, price: number): Menu => {
     const created = FoodDividerStore.createFood(name, price);
     updateFoods();
     return created;

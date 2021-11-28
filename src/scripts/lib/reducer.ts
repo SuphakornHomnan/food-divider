@@ -4,6 +4,8 @@ import { Actions, ActionTypes, State } from "./types";
 
 export const initialState: State = {
   counter: 0,
+  foods: [],
+  members: [],
 };
 
 const reducer: Reducer<State, ActionTypes> = (state, action) => {

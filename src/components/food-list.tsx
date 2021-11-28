@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, Badge, Table } from "react-bootstrap";
-import { Food } from "../scripts/dto/food-dto";
+import { Menu } from "../scripts/dto/food-dto";
 import { useFoodStore } from "../hooks/useFoodStore";
 
 export const Member: React.FC<{ name: string; color: string }> = ({
@@ -13,7 +13,7 @@ export const Member: React.FC<{ name: string; color: string }> = ({
 );
 
 interface FoodListProps {
-  foods: Food[];
+  foods: Menu[];
 }
 const FoodList: React.FC<FoodListProps> = ({ foods }) => {
   const { getMemberList } = useFoodStore();

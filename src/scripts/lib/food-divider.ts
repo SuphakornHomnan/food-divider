@@ -1,9 +1,9 @@
-import { Food } from "../dto/food-dto";
+import { Menu } from "../dto/food-dto";
 import { Member } from "../dto/member-dto";
 
 export class FoodDivider {
   private static instance: FoodDivider;
-  private foods: Food[];
+  private foods: Menu[];
   private members: Member[];
 
   private constructor() {
@@ -18,7 +18,7 @@ export class FoodDivider {
     return FoodDivider.instance;
   }
 
-  public createFood(name: string, price: number): Food {
+  public createFood(name: string, price: number): Menu {
     const food = { name, price, memberIDs: [], id: this.foods.length };
     this.foods.push(food);
     return food;
@@ -28,7 +28,7 @@ export class FoodDivider {
     this.members.push({ name, price: 0, id: this.members.length, color });
   } //
 
-  public getFoods(): Food[] {
+  public getFoods(): Menu[] {
     return this.foods;
   } //
 
@@ -36,7 +36,7 @@ export class FoodDivider {
     return this.members;
   } //
 
-  public getFood(foodID: number): Food | undefined {
+  public getFood(foodID: number): Menu | undefined {
     return this.foods.find((obj) => obj.id === foodID);
   } //
 
@@ -44,7 +44,7 @@ export class FoodDivider {
     return this.members.find((obj) => obj.id === memberID);
   } //
 
-  public getFoodList(foodIDList: number[]): Food[] {
+  public getFoodList(foodIDList: number[]): Menu[] {
     return this.foods.filter((food) => foodIDList.includes(food.id));
   } //
 

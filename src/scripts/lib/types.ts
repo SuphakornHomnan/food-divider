@@ -1,5 +1,10 @@
+import { Menu } from "../dto/food-dto";
+import { Member } from "../dto/member-dto";
+
 export type State = {
   counter: number;
+  foods: Array<Menu>;
+  members: Array<Member>;
 };
 
 export enum Actions {
