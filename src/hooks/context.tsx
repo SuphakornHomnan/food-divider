@@ -8,7 +8,7 @@ interface StateContextType {
 }
 const StateContext = createContext<StateContextType | null>(null);
 
-export const Provider: React.FC = ({ children }) => {
+export const StateProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer<React.Reducer<State, ActionTypes>>(
     reducer,
     initialState
