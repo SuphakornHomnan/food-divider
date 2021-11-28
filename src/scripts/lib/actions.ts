@@ -5,6 +5,24 @@ import { State } from "./types";
 const getMember = (members: Member[], id: number) =>
   members.find((member) => member.id === id);
 
+const addMembersToMenu = (state: State, input: AddMembersToMenu): State => {
+  const { menuID, memberIDs } = input;
+  const updatedMenuMember = state.menus.map<Menu>((menu) =>
+    menu.id === menuID
+      ? {
+          ...menu,
+          memberIDs: Array.from(new Set([...menu.memberIDs, ...memberIDs])),
+        }
+      : menu
+  );
+  const updatedMemberPrice = calculate(state);
+  return {
+    ...state,
+    menus: updatedMenuMember,
+    members: updatedMemberPrice,
+  };
+};
+
 const getMenusByMemberID = (menus: Menu[], memberID: number) =>
   menus.filter((menu) => menu.memberIDs.includes(memberID));
 
@@ -30,24 +48,6 @@ export const increaseFunction = (state: State): State => {
   return {
     ...state,
     counter: nextState,
-  };
-};
-
-const addMembersToMenu = (state: State, input: AddMembersToMenu): State => {
-  const { menuID, memberIDs } = input;
-  const updatedMenuMember = state.menus.map<Menu>((menu) =>
-    menu.id === menuID
-      ? {
-          ...menu,
-          memberIDs: Array.from(new Set([...menu.memberIDs, ...memberIDs])),
-        }
-      : menu
-  );
-  const updatedMemberPrice = calculate(state);
-  return {
-    ...state,
-    menus: updatedMenuMember,
-    members: updatedMemberPrice,
   };
 };
 
