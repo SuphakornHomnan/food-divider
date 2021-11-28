@@ -2,11 +2,10 @@ import { useReducer, createContext, Dispatch, useContext } from "react";
 import reducer, { initialState } from "../scripts/lib/reducer";
 import { ActionTypes, State } from "../scripts/lib/types";
 
-export interface StateContextType {
+interface StateContextType {
   state: State;
   dispatch: Dispatch<ActionTypes>;
 }
-
 const StateContext = createContext<StateContextType | null>(null);
 
 export const Provider: React.FC = ({ children }) => {
