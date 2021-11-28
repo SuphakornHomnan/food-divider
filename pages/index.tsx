@@ -41,12 +41,10 @@ export interface SelectMember extends MemberType {
 }
 
 const Home: NextPage = () => {
-  const { state, dispatch } = useStateContext();
-
   const [active, setActive] = useState<Tabs>(Tabs.members);
-
   const [selectMember, setSelectMember] = useState<SelectMember[]>([]);
-
+  
+  const { state, dispatch } = useStateContext();
   const [open, close, { isOpen, message: menuName }] = useModal();
 
   const addMenu = (price: number) => {
