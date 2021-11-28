@@ -29,14 +29,14 @@ const getMenusByMemberID = (menus: Menu[], memberID: number) =>
 const calculate = (state: State): Member[] => {
   const { menus, members } = state;
   const updatedPriceMember = members.map<Member>((member) => {
-    const menusToBuy = getMenusByMemberID(menus, member.id);
-    const priceToBuy = menusToBuy.reduce(
+    const menusToPay = getMenusByMemberID(menus, member.id);
+    const priceToPay = menusToPay.reduce(
       (acc, cur) => acc + cur.price / cur.memberIDs.length,
       0
     );
     return {
       ...member,
-      price: priceToBuy,
+      price: priceToPay,
     };
   });
 
