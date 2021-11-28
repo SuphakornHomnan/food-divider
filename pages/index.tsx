@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Container, Nav, Row } from "react-bootstrap";
 
 import { Member as MemberType } from "../src/scripts/dto/member-dto";
