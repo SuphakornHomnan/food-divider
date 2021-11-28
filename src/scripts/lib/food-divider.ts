@@ -1,4 +1,4 @@
-import { Menu } from "../dto/food-dto";
+import { Menu } from "../dto/menu-dto";
 import { Member } from "../dto/member-dto";
 
 export class FoodDivider {

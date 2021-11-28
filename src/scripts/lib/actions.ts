@@ -1,4 +1,4 @@
-import { CreateMenu } from "../dto/food-dto";
+import { CreateMenu } from "../dto/menu-dto";
 import { State } from "./types";
 
 export const increaseFunction = (state: State) => {
@@ -9,10 +9,10 @@ export const increaseFunction = (state: State) => {
   };
 };
 
-export const addMenu = (state: State, input: CreateMenu) => {
-  const food = { ...input, memberIDs: [], id: state.foods.length };
+export const addMenu = (state: State, input: CreateMenu): State => {
+  const newMenu = { ...input, memberIDs: [], id: state.menus.length };
   return {
     ...state,
-    food: [...state.foods, food],
+    menus: [...state.menus, newMenu],
   };
 };

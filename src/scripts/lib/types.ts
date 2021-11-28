@@ -1,9 +1,9 @@
-import { Menu } from "../dto/food-dto";
+import { Menu } from "../dto/menu-dto";
 import { Member } from "../dto/member-dto";
 
 export type State = {
   counter: number;
-  foods: Array<Menu>;
+  menus: Array<Menu>;
   members: Array<Member>;
 };
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu } from "../scripts/dto/food-dto";
+import { Menu } from "../scripts/dto/menu-dto";
 import { Member } from "../scripts/dto/member-dto";
 import { FoodDivider } from "../scripts/lib/food-divider";
 
