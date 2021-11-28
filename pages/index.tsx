@@ -15,11 +15,26 @@ import { Actions } from "../src/scripts/lib/types";
 import { CreateMenu } from "../src/scripts/dto/menu-dto";
 import { useStateContext } from "../src/hooks/context";
 
-enum Navs {
-  foods = "foods",
+enum Tabs {
+  menus = "menus",
   members = "members",
   donate = "donate",
 }
+
+const tabs = [
+  {
+    label: "รายการ",
+    value: Tabs.menus,
+  },
+  {
+    label: "คนจ่าย",
+    value: Tabs.members,
+  },
+  {
+    label: "บริจาค",
+    value: Tabs.donate,
+  },
+];
 
 export interface SelectMember extends MemberType {
   select: boolean;
@@ -28,13 +43,13 @@ export interface SelectMember extends MemberType {
 const Home: NextPage = () => {
   const { state, dispatch } = useStateContext();
 
-  const [active, setActive] = useState<Navs>(Navs.members);
+  const [active, setActive] = useState<Tabs>(Tabs.members);
 
   const [selectMember, setSelectMember] = useState<SelectMember[]>([]);
 
   const [open, close, { isOpen, message: menuName }] = useModal();
 
-  const addFood = (price: number) => {
+  const addMenu = (price: number) => {
     const memberIDs = selectMember
       .filter((mem) => mem.select)
       .map((member) => member.id);
@@ -55,7 +70,7 @@ const Home: NextPage = () => {
     );
   };
 
-  const renderFoodTab = () => (
+  const renderMenuTab = () => (
     <>
       <MenuList menus={state.menus} />
       <FoodForm
@@ -98,60 +113,49 @@ const Home: NextPage = () => {
   ).length;
 
   return (
-    <Container className="p-3">
-      <Row>
-        <Col>
-          <h2>จำนวนคนจ่าย</h2>
-          <h1>{spendMembersCount}</h1>
-        </Col>
-        <Col>
-          <h2>ราคาอาหารรวม</h2>
-          <h1>{totalPrice}</h1>
-        </Col>
-        <Col>
-          <GenerateQRCode inputNumber="0987637086" />
-        </Col>
-      </Row>
+    <>
       <AddFoodModal
         visible={isOpen}
-        onAddFood={addFood}
+        onAddFood={addMenu}
         onHideModal={close}
         selectMember={selectMember}
         onSelectMember={onSelectMember}
         menuName={menuName}
       />
-      <Nav variant="tabs">
-        <Nav.Item>
-          <Nav.Link
-            onClick={() => setActive(Navs.members)}
-            active={active === Navs.members}
-          >
-            คนจ่าย
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            onClick={() => setActive(Navs.foods)}
-            active={active === Navs.foods}
-          >
-            รายการอาหาร
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            onClick={() => setActive(Navs.donate)}
-            active={active === Navs.donate}
-          >
-            บริจาค
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
-      {active === Navs.foods
-        ? renderFoodTab()
-        : active === Navs.members
-        ? renderMemberTab()
-        : renderDonateTab()}
-    </Container>
+      <Container className="p-3">
+        <Row>
+          <Col>
+            <h2>จำนวนคนจ่าย</h2>
+            <h1>{spendMembersCount}</h1>
+          </Col>
+          <Col>
+            <h2>ราคารวม</h2>
+            <h1>{totalPrice}</h1>
+          </Col>
+          <Col>
+            <GenerateQRCode inputNumber="0987637086" />
+          </Col>
+        </Row>
+        {/* tabs */}
+        <Nav variant="tabs">
+          {tabs.map((tab, i) => (
+            <Nav.Item key={i}>
+              <Nav.Link
+                onClick={() => setActive(tab.value)}
+                active={active === tab.value}
+              >
+                {tab.label}
+              </Nav.Link>
+            </Nav.Item>
+          ))}
+        </Nav>
+        {active === Tabs.menus
+          ? renderMenuTab()
+          : active === Tabs.members
+          ? renderMemberTab()
+          : renderDonateTab()}
+      </Container>
+    </>
   );
 };
 
