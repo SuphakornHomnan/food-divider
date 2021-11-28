@@ -1,7 +1,7 @@
 import { CreateMenu } from "../dto/menu-dto";
 import { State } from "./types";
 
-export const increaseFunction = (state: State) => {
+export const increaseFunction = (state: State): State => {
   const nextState = state.counter + 1;
   return {
     ...state,
