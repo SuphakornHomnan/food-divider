@@ -50,6 +50,20 @@ class MyDocument extends Document {
             sizes="167x167"
             href="/icons/touch-icon-ipad-retina.png"
           />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&display=swap"
+            rel="stylesheet"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          />
 
           <link rel="icon" type="image/png" sizes="32x32" href="/vercel.svg" />
           <link rel="icon" type="image/png" sizes="16x16" href="/vercel.svg" />
