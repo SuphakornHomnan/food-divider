@@ -9,3 +9,7 @@ export type CreateMember = {
   name: string;
   color: string;
 };
+
+export type RemoveMember = {
+  memberID: number;
+};
