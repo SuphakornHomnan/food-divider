@@ -11,7 +11,22 @@ export type CreateMenu = {
   memberIDs: number[];
 };
 
+export type UpdateMenu = {
+  menuID: number;
+  name?: string;
+  price?: number;
+};
+
 export type AddMembersToMenu = {
   menuID: number;
   memberIDs: number[];
+};
+
+export type RemoveMemberFromMenu = {
+  menuID: number;
+  memberID: number;
+};
+
+export type RemoveMenu = {
+  menuID: number;
 };

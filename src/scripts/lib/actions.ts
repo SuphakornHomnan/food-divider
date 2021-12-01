@@ -1,27 +1,34 @@
-import { CreateMember, Member } from "../dto/member-dto";
-import { AddMembersToMenu, CreateMenu, Menu } from "../dto/menu-dto";
+import { CreateMember, Member, RemoveMember } from "../dto/member-dto";
+import {
+  AddMembersToMenu,
+  CreateMenu,
+  Menu,
+  RemoveMemberFromMenu,
+  RemoveMenu,
+  UpdateMenu,
+} from "../dto/menu-dto";
 import { State } from "./types";
 
 const getMember = (members: Member[], id: number) =>
   members.find((member) => member.id === id);
 
-const addMembersToMenu = (state: State, input: AddMembersToMenu): State => {
-  const { menuID, memberIDs } = input;
-  const updatedMenuMember = state.menus.map<Menu>((menu) =>
-    menu.id === menuID
-      ? {
-          ...menu,
-          memberIDs: Array.from(new Set([...menu.memberIDs, ...memberIDs])),
-        }
-      : menu
-  );
-  const updatedMemberPrice = calculate(state);
-  return {
-    ...state,
-    menus: updatedMenuMember,
-    members: updatedMemberPrice,
-  };
-};
+// const addMembersToMenu = (state: State, input: AddMembersToMenu): State => {
+//   const { menuID, memberIDs } = input;
+//   const updatedMenuMember = state.menus.map<Menu>((menu) =>
+//     menu.id === menuID
+//       ? {
+//           ...menu,
+//           memberIDs: Array.from(new Set([...menu.memberIDs, ...memberIDs])),
+//         }
+//       : menu
+//   );
+//   const updatedMemberPrice = calculate(state);
+//   return {
+//     ...state,
+//     menus: updatedMenuMember,
+//     members: updatedMemberPrice,
+//   };
+// };
 
 const getMenusByMemberID = (menus: Menu[], memberID: number) =>
   menus.filter((menu) => menu.memberIDs.includes(memberID));
@@ -43,7 +50,7 @@ const calculate = (state: State): Member[] => {
   return updatedPriceMember;
 };
 
-export const addMenu = (state: State, input: CreateMenu): State => {
+export const createMenu = (state: State, input: CreateMenu): State => {
   const { name, price, memberIDs } = input;
   const newMenu: Menu = {
     name,
@@ -62,10 +69,109 @@ export const addMenu = (state: State, input: CreateMenu): State => {
   };
 };
 
-export const addMember = (state: State, input: CreateMember): State => {
+export const createMember = (state: State, input: CreateMember): State => {
   const newMember: Member = { ...input, price: 0, id: state.members.length };
   return {
     ...state,
     members: [...state.members, newMember],
+  };
+};
+
+export const removeMember = (
+  state: State,
+  { memberID }: RemoveMember
+): State => {
+  const updatedMembers: Member[] = state.members.filter(
+    (member: Member) => member.id !== memberID
+  );
+  const updatedMenus: Menu[] = state.menus.filter((menu: Menu) =>
+    menu.memberIDs.filter((memberID: number) => memberID !== memberID)
+  );
+  const updatedMemberPrice: Member[] = calculate({
+    members: updatedMembers,
+    menus: updatedMenus,
+  });
+  return {
+    menus: updatedMenus,
+    members: updatedMemberPrice,
+  };
+};
+
+export const removeMenu = (state: State, { menuID }: RemoveMenu): State => {
+  const updatedMenus: Menu[] = state.menus.filter(
+    (menu: Menu) => menu.id !== menuID
+  );
+  const updatedMemberPrice: Member[] = calculate({
+    members: state.members,
+    menus: updatedMenus,
+  });
+  return {
+    menus: updatedMenus,
+    members: updatedMemberPrice,
+  };
+};
+
+export const updateMenu = (
+  state: State,
+  { menuID, name, price }: UpdateMenu
+): State => {
+  if (!name && !price) {
+    return state;
+  }
+  const { members, menus }: State = state;
+  if (name) {
+    menus[menuID].name = name;
+  }
+  if (price) {
+    menus[menuID].price = price;
+  }
+
+  const updatedMemberPrice: Member[] = calculate({
+    members,
+    menus,
+  });
+  return {
+    menus,
+    members: updatedMemberPrice,
+  };
+};
+
+export const addMembersToMenu = (
+  state: State,
+  { menuID, memberIDs }: AddMembersToMenu
+): State => {
+  const { members, menus }: State = state;
+  memberIDs.map((memberID: number) => {
+    if (!menus[menuID].memberIDs.includes(memberID)) {
+      menus[menuID].memberIDs.push(memberID);
+    }
+  });
+
+  const updatedMemberPrice: Member[] = calculate({
+    members,
+    menus,
+  });
+
+  return {
+    menus,
+    members: updatedMemberPrice,
+  };
+};
+
+export const removeMemberFromMenu = (
+  state: State,
+  { menuID, memberID }: RemoveMemberFromMenu
+): State => {
+  const { members, menus }: State = state;
+  menus[menuID].memberIDs = menus[menuID].memberIDs.filter(
+    (member) => member !== memberID
+  );
+  const updatedMemberPrice: Member[] = calculate({
+    members,
+    menus,
+  });
+  return {
+    menus,
+    members: updatedMemberPrice,
   };
 };
