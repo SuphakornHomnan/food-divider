@@ -1,6 +1,4 @@
 import { QRCode, IProps } from "react-qrcode-logo";
-import { Modal } from "react-bootstrap";
-import { useModal } from "../hooks/use-modal";
 import { ZoomIn } from "react-feather";
 const generatePayload = require("promptpay-qr");
 
@@ -19,10 +17,9 @@ export const GenerateQRCode: React.FC<QrcodeProps> = ({
   enableCORS = false,
   logoImage = "https://img.soccersuck.com/images/2020/07/30/FB_IMG_1596085181720.jpg",
 }) => {
-  const [open, close, context] = useModal(false);
   const inputNum: string = inputNumber.trim();
   if (inputNum.length !== 10 && inputNum.length !== 13) {
-    throw new Error("string input must be length equal 10 or 13");
+    return null;
   }
   const payload: string = generatePayload(inputNum, {});
   const options: IProps = {
@@ -33,34 +30,11 @@ export const GenerateQRCode: React.FC<QrcodeProps> = ({
     quietZone,
     bgColor: "#FFFFFF",
     fgColor: "#000000ff",
-    logoImage,
+    // logoImage,
     logoWidth: 80,
     logoHeight: 80,
     logoOpacity: 0.47,
     qrStyle: "squares",
   };
-  return (
-    <>
-      <Modal show={context.isOpen} centered onHide={close}>
-        {context.message}
-      </Modal>
-      <div
-        className="text-center"
-        onClick={() =>
-          open(
-            <div className="text-center p-3">
-              <QRCode {...options} size={options.size! * 2} />
-              <p>{inputNum}</p>
-            </div>
-          )
-        }
-      >
-        <QRCode {...options} />
-        <div>
-          <ZoomIn size={16} />
-        </div>
-        <p>{inputNum}</p>
-      </div>
-    </>
-  );
+  return <QRCode {...options} />;
 };
