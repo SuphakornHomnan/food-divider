@@ -90,6 +90,8 @@ const Index = () => {
             style={{ padding: "1rem" }}
           >
             <Input
+              type='number'
+              autoComplete='off'
               onChange={(e) => setQr(e.target.value)}
               placeholder="กรอก promptpay"
             />
