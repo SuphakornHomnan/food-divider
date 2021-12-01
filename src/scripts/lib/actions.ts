@@ -81,18 +81,24 @@ export const removeMember = (
   state: State,
   { memberID }: RemoveMember
 ): State => {
-  const updatedMembers: Member[] = state.members.filter(
-    (member: Member) => member.id !== memberID
+  const updatedMembers = state.members.filter(
+    (member) => member.id !== memberID
   );
-  const updatedMenus: Menu[] = state.menus.filter((menu: Menu) =>
-    menu.memberIDs.filter((memberID: number) => memberID !== memberID)
-  );
-  const updatedMemberPrice: Member[] = calculate({
+  const updatedMenus = state.menus.map<Menu>((menu) => {
+    return {
+      ...menu,
+      memberIDs: menu.memberIDs.filter((id: number) => id !== memberID),
+    };
+  });
+  const newState: State = {
+    ...state,
     members: updatedMembers,
     menus: updatedMenus,
-  });
+  };
+  const updatedMemberPrice: Member[] = calculate(newState);
+
   return {
-    menus: updatedMenus,
+    ...newState,
     members: updatedMemberPrice,
   };
 };
