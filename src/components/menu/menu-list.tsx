@@ -11,10 +11,7 @@ const MenuList: React.FC<MenuListProps> = ({ onRemove, onEdit }) => {
   const getMemberList = (memberIDs: number[]) =>
     state.members.filter((member) => memberIDs.includes(member.id));
   return (
-    <Box
-      style={{ height: 575, overflow: "auto", padding: "1.5rem 0" }}
-      margin="1.5rem 0"
-    >
+    <Box style={{ flex: 1, overflow: "auto", padding: "1.5rem 0.5rem" }}>
       {state.menus.map((menu) => (
         <MenuCard
           onEdit={onEdit}
