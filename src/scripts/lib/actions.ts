@@ -104,22 +104,21 @@ export const removeMember = (
 };
 
 export const removeMenu = (state: State, { menuID }: RemoveMenu): State => {
-  const updatedMenus: Menu[] = state.menus.filter(
-    (menu: Menu) => menu.id !== menuID
-  );
-  const updatedMemberPrice: Member[] = calculate({
-    members: state.members,
+  const updatedMenus = state.menus.filter((menu: Menu) => menu.id !== menuID);
+  const newState: State = {
+    ...state,
     menus: updatedMenus,
-  });
+  };
+  const updatedMemberPrice: Member[] = calculate(newState);
   return {
-    menus: updatedMenus,
+    ...newState,
     members: updatedMemberPrice,
   };
 };
 
 export const updateMenu = (
   state: State,
-  { menuID, name, price }: UpdateMenu
+  { menuID, name, price,memberIDs }: UpdateMenu
 ): State => {
   if (!name && !price) {
     return state;
@@ -130,6 +129,10 @@ export const updateMenu = (
   }
   if (price) {
     menus[menuID].price = price;
+  }
+
+  if(memberIDs) {
+    menus[menuID].memberIDs = memberIDs
   }
 
   const updatedMemberPrice: Member[] = calculate({

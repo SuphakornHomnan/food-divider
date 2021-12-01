@@ -17,21 +17,29 @@ interface ToolBoxProps {
   onRemove?: () => void;
   onEdit?: () => void;
   absolute?: boolean;
+  disabledRemove?: boolean;
+  disabledEdit?: boolean;
 }
 
 const ToolBox: React.FC<ToolBoxProps> = ({
   onRemove,
   onEdit,
   absolute = false,
+  disabledEdit = false,
+  disabledRemove = false,
 }) => (
   <IconContainer style={absolute ? { position: "absolute" } : undefined}>
-    <StyledIconButton onClick={onEdit}>
-      <EditOutlined />
-    </StyledIconButton>
-    <StyledIconButton color="warning" onClick={onRemove}>
-      <DeleteOutlined />
-    </StyledIconButton>
+    {!disabledEdit && (
+      <StyledIconButton onClick={onEdit}>
+        <EditOutlined />
+      </StyledIconButton>
+    )}
+    {!disabledRemove && (
+      <StyledIconButton color="warning" onClick={onRemove}>
+        <DeleteOutlined />
+      </StyledIconButton>
+    )}
   </IconContainer>
 );
 
-export default ToolBox
+export default ToolBox;

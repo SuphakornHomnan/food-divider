@@ -11,15 +11,15 @@ type ModalCustomHookFunction = (
 export const useModal: ModalCustomHookFunction = (
   initialState: boolean = false
 ) => {
-  const [message, setMessage] = React.useState("");
+  const [message, setMessage] = React.useState<any>(null);
   const [open, setOpen] = React.useState(initialState);
   const handleOpen = (message?: any) => {
-    setMessage(message || "");
+    setMessage(message);
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
-    setMessage("");
+    setMessage(null);
   };
 
   return [handleOpen, handleClose, { isOpen: open, message }];

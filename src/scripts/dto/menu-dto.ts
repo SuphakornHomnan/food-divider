@@ -15,6 +15,7 @@ export type UpdateMenu = {
   menuID: number;
   name?: string;
   price?: number;
+  memberIDs?: number[];
 };
 
 export type AddMembersToMenu = {
