@@ -1,6 +1,8 @@
-import { useReducer, createContext, useContext } from "react";
+import { useReducer, createContext, useContext, useEffect } from "react";
+import { MEMBER_LOCAL_STORAGE_TOKEN } from "../config";
+import { Member } from "../scripts/dto/member-dto";
 import reducer, { initialState } from "../scripts/lib/reducer";
-import { ActionTypes, State } from "../scripts/lib/types";
+import { Actions, ActionTypes, State } from "../scripts/lib/types";
 
 interface StateContextType {
   state: State;
@@ -13,6 +15,25 @@ export const StateProvider: React.FC = ({ children }) => {
     reducer,
     initialState
   );
+
+  useEffect(() => {
+    const savedMember = localStorage.getItem(MEMBER_LOCAL_STORAGE_TOKEN);
+    if (savedMember) {
+      const parseSavedMember = JSON.parse(savedMember) as Member[];
+      dispatch({
+        type: Actions.SET_MEMBER,
+        payload: parseSavedMember.map((member) => ({ ...member, price: 0 })),
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      MEMBER_LOCAL_STORAGE_TOKEN,
+      JSON.stringify(state.members)
+    );
+  }, [state.members]);
+
   return (
     <StateContext.Provider value={{ state, dispatch }}>
       {children}

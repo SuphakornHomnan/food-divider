@@ -1,5 +1,13 @@
 import { Reducer } from "react";
-import { addMembersToMenu, createMember, createMenu, removeMember, removeMemberFromMenu, removeMenu, updateMenu } from "./actions";
+import {
+  addMembersToMenu,
+  createMember,
+  createMenu,
+  removeMember,
+  removeMemberFromMenu,
+  removeMenu,
+  updateMenu,
+} from "./actions";
 import { Actions, ActionTypes, State } from "./types";
 
 export const initialState: State = {
@@ -23,6 +31,13 @@ const reducer: Reducer<State, ActionTypes> = (state, action) => {
       return createMember(state, action.payload);
     case Actions.REMOVE_MEMBER:
       return removeMember(state, action.payload);
+    case Actions.SET_STATE:
+      return action.payload;
+    case Actions.SET_MEMBER:
+      return {
+        ...state,
+        members: action.payload,
+      };
     default:
       throw new Error();
   }
