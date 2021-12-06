@@ -33,23 +33,17 @@ const AddMenuDrawer: React.FC<AddMenuDrawerProps> = ({
     setPrice("");
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!editMode) {
-      if (!menu || !price) {
-        return alert("กรุณากรอกข้อมูลให้ครบ");
-      }
-      const newMenu: CreateMenu = {
-        name: menu,
-        price: Number.parseFloat(price as string),
-        memberIDs: selected
-          .filter((member) => member.selected)
-          .map((member) => member.id),
-      };
-      dispatch({ type: Actions.CREATE_MENU, payload: newMenu });
-      clearValue();
-      onClose();
-    }
+  const onSubmit = () => {
+    const newMenu: CreateMenu = {
+      name: menu.trim(),
+      price: Number.parseFloat(price as string),
+      memberIDs: selected
+        .filter((member) => member.selected)
+        .map((member) => member.id),
+    };
+    dispatch({ type: Actions.CREATE_MENU, payload: newMenu });
+    clearValue();
+    onClose();
   };
 
   const checkPrice = (price: string) => {
@@ -151,39 +145,35 @@ const AddMenuDrawer: React.FC<AddMenuDrawerProps> = ({
           ล้าง
         </Button>
         <Typography>เพิ่มรายการอาหาร</Typography>
-        <form onSubmit={onSubmit}>
-          <Input
-            name="name"
-            value={menu}
-            onChange={(e) => setMenu(e.target.value)}
-            placeholder="พิมพ์ชื่อเมนู..."
-            autoComplete='off'
-          />
-          <br />
-          <Typography>ราคา</Typography>
-          <Input
-            name="price"
-            type="number"
-            autoComplete='off'
-            value={price}
-            onChange={({ target }) =>
-              setPrice(target.value ? checkPrice(target.value) : "")
-            }
-            placeholder="ราคา"
-          />
-          <input style={{ display: "none" }} type="submit" />
-        </form>
+
+        <Input
+          name="name"
+          value={menu}
+          onChange={(e) => setMenu(e.target.value)}
+          placeholder="พิมพ์ชื่อเมนู..."
+          autoComplete="off"
+        />
         <br />
-        {editMode && (
-          <Button
-            disabled={editValue === null || !menu || !price}
-            onClick={onEditSubmit}
-            variant="outlined"
-            color="warning"
-          >
-            บันทึก
-          </Button>
-        )}
+        <Typography>ราคา</Typography>
+        <Input
+          name="price"
+          type="number"
+          autoComplete="off"
+          value={price}
+          onChange={({ target }) =>
+            setPrice(target.value ? checkPrice(target.value) : "")
+          }
+          placeholder="ราคา"
+        />
+        <br />
+        <Button
+          disabled={(editMode && editValue === null) || !menu.trim() || !price}
+          onClick={editMode ? onEditSubmit : onSubmit}
+          variant="outlined"
+          color="warning"
+        >
+          บันทึก
+        </Button>
       </Box>
     </SwipeableDrawer>
   );

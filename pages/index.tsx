@@ -17,25 +17,39 @@ import { useStateContext } from "../src/hooks/context";
 import { Actions } from "../src/scripts/lib/types";
 import { numberWithCommas } from "../src/scripts/lib/utils";
 import Input from "../src/components/common/input";
-import { GenerateQRCode } from "../src/components/generate-qrcode-promptpay";
 
 const StyledContainer = styled(Container)({
   padding: "1rem",
 });
 
 const Index = () => {
-  const { state, dispatch } = useStateContext();
+  const { state, dispatch, promptpay } = useStateContext();
   const [open, close, { isOpen, message: menuID }] = useModal();
   const [editMode, setEditMode] = useState(false);
   const [openMemberBook, closeMemberBook, { isOpen: memberBookOpen }] =
     useModal();
   const [openQR, closeQR, qrContext] = useModal();
-  const [qr, setQr] = useState<string>("");
 
   const totalPrice = state.menus.reduce((acc, cur) => acc + cur.price, 0);
   const totalPayPersons = state.members.filter(
     (member) => member.price > 0
   ).length;
+
+  const onEditMenu = (id: number) => {
+    setEditMode(true);
+    open(id);
+  };
+  const onRemoveMenu = (menuID: number) => {
+    const r = confirm(
+      `ต้องการลบ ${state.menus.find((menu) => menu.id === menuID)?.name!}`
+    );
+    if (r) {
+      dispatch({
+        type: Actions.REMOVE_MENU,
+        payload: { menuID },
+      });
+    }
+  };
 
   return (
     <StyledContainer>
@@ -55,10 +69,14 @@ const Index = () => {
             </Typography>
           </Grid>
         </Grid>
-        {qr && <GenerateQRCode inputNumber={qr.toString()} />}
         <br />
-        <Button style={{ marginBottom: 10 }} onClick={() => open()}>
-          เพิ่มรายการ
+        <Button
+          variant="outlined"
+          color={promptpay.qrPromptpay ? "warning" : "primary"}
+          style={{ marginBottom: 10 }}
+          onClick={() => openQR()}
+        >
+          {promptpay.qrPromptpay ? "แก้ไข" : "เพิ่ม"} QR PromptPay
         </Button>
         <Button
           onClick={() => openMemberBook()}
@@ -68,13 +86,8 @@ const Index = () => {
         >
           คนจ่าย
         </Button>
-        <Button
-          variant="outlined"
-          color="warning"
-          style={{ marginBottom: 10 }}
-          onClick={() => openQR()}
-        >
-          เพิ่ม QR PromptPay
+        <Button style={{ marginBottom: 10 }} onClick={() => open()}>
+          เพิ่มรายการ
         </Button>
         <SwipeableDrawer
           onClose={closeQR}
@@ -87,28 +100,31 @@ const Index = () => {
               e.preventDefault();
               closeQR();
             }}
-            style={{ padding: "1rem" }}
+            style={{ padding: "1rem", display: "flex" }}
           >
-            <Input
-              type='number'
-              autoComplete='off'
-              onChange={(e) => setQr(e.target.value)}
-              placeholder="กรอก promptpay"
-            />
+            <Box flex={1}>
+              <Input
+                value={promptpay.qrPromptpay}
+                type="number"
+                autoComplete="off"
+                onChange={(e) => promptpay.setPromptpay(e.target.value)}
+                placeholder="กรอก promptpay"
+              />
+            </Box>
+            {promptpay.qrPromptpay && (
+              <Button
+                color="error"
+                onClick={() => {
+                  promptpay.setPromptpay("");
+                  closeQR();
+                }}
+              >
+                ล้าง
+              </Button>
+            )}
           </form>
         </SwipeableDrawer>
-        <MenuList
-          onEdit={(id) => {
-            setEditMode(true);
-            open(id);
-          }}
-          onRemove={(menuID) =>
-            dispatch({
-              type: Actions.REMOVE_MENU,
-              payload: { menuID },
-            })
-          }
-        />
+        <MenuList onEdit={onEditMenu} onRemove={onRemoveMenu} />
       </Box>
       <AddMenuDrawer
         editMode={editMode}

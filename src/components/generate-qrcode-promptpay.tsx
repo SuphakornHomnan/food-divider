@@ -1,5 +1,6 @@
 import { QRCode, IProps } from "react-qrcode-logo";
 import { ZoomIn } from "react-feather";
+import { Typography } from "@mui/material";
 const generatePayload = require("promptpay-qr");
 
 interface QrcodeProps {
@@ -19,7 +20,7 @@ export const GenerateQRCode: React.FC<QrcodeProps> = ({
 }) => {
   const inputNum: string = inputNumber.trim();
   if (inputNum.length !== 10 && inputNum.length !== 13) {
-    return null;
+    return <Typography color="red">รูปแบบ promptpay ไม่ถูกต้อง</Typography>;
   }
   const payload: string = generatePayload(inputNum, {});
   const options: IProps = {
@@ -36,5 +37,10 @@ export const GenerateQRCode: React.FC<QrcodeProps> = ({
     logoOpacity: 0.47,
     qrStyle: "squares",
   };
-  return <QRCode {...options} />;
+  return (
+    <>
+      <QRCode {...options} />
+      <Typography>{inputNumber}</Typography>
+    </>
+  );
 };

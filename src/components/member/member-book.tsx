@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import { Actions } from "../../scripts/lib/types";
 import { randomColor } from "../../scripts/lib/random-color";
 import { numberWithCommas } from "../../scripts/lib/utils";
+import { GenerateQRCode } from "../generate-qrcode-promptpay";
 
 interface MemberCardProps {
   member: Member;
@@ -63,14 +64,18 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
   onClose = () => {},
 }) => {
   const classes = useStyles();
-  const { state, dispatch } = useStateContext();
+  const {
+    state,
+    dispatch,
+    promptpay: { qrPromptpay },
+  } = useStateContext();
   const [name, setName] = useState("");
   const [randomedColor, setRandomColor] = useState<string[]>([
     ...state.members.map((member) => member.color),
   ]);
   const onAddNewMember = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name) {
+    if (!name.trim()) {
       return alert("กรุณากรอกชื่อ");
     }
     let newColor = randomColor();
@@ -79,7 +84,7 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
     }
     setRandomColor([...randomedColor, newColor]);
     const newMember: CreateMember = {
-      name,
+      name: name.trim(),
       color: newColor,
     };
     dispatch({ type: Actions.CREATE_MEMBER, payload: newMember });
@@ -112,6 +117,12 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
         flexDirection="column"
         padding="1rem 0"
       >
+        {qrPromptpay && (
+          <Box padding="0 2rem" textAlign="center">
+            <Typography>QR Promptpay</Typography>
+            <GenerateQRCode quietZone={10} inputNumber={qrPromptpay} />
+          </Box>
+        )}
         <Box
           display="flex"
           justifyContent="space-between"
