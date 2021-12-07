@@ -107,13 +107,14 @@ const Index = () => {
           >
             จ่ายคนละ
           </Button>
-          <Button style={{ marginBottom: 10 }} onClick={() => open()}>
-            เพิ่มรายการ
-          </Button>
         </Box>
         <Box className="menu-scroll-ref" style={{ overflow: "auto" }} flex={1}>
           <MenuList onEdit={onEditMenu} onRemove={onRemoveMenu} />
         </Box>
+
+        <Button style={{ marginBottom: 10 }} onClick={() => open()}>
+          เพิ่มรายการ
+        </Button>
       </Box>
       <AddMenuDrawer
         editMode={editMode}
