@@ -43,6 +43,18 @@ const reducer: Reducer<State, ActionTypes> = (state, action) => {
         ...state,
         menus: action.payload,
       };
+    case Actions.CLEAR_MEMU:
+      return {
+        ...state,
+        menus: [],
+        members: state.members.map((member) => ({ ...member, price: 0 })),
+      };
+    case Actions.CLEAR_MEMBER:
+      return {
+        ...state,
+        members: [],
+        menus: state.menus.map((menu) => ({ ...menu, memberIDs: [] })),
+      };
     default:
       throw new Error();
   }

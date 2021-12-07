@@ -41,7 +41,7 @@ const MemberCard: React.FC<MemberCardProps> = ({
         </Icon>
         <Typography marginRight="10px">{member.name}</Typography>
         <Typography>
-          คนละ {numberWithCommas(Math.ceil(member.price))} บาท
+          จ่าย {numberWithCommas(Math.ceil(member.price))} บาท
         </Typography>
       </Box>
       <ToolBox
@@ -105,7 +105,7 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
   const onClearMember = () => {
     const r = confirm("ต้องการล้างรายชื่อทั้งหมด ?");
     if (r) {
-      dispatch({ type: Actions.SET_MEMBER, payload: [] });
+      dispatch({ type: Actions.CLEAR_MEMBER });
     }
   }
   return (

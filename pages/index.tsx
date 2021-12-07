@@ -1,7 +1,17 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { AttachMoneyOutlined } from "@mui/icons-material";
-import { Button, Container, Typography, Box, Grid } from "@mui/material";
+import {
+  Button,
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Dialog,
+  DialogContent,
+} from "@mui/material";
 import { styled } from "@mui/system";
+import queryString from "query-string";
+import { useRouter } from "next/router";
 import { useModal } from "../src/hooks/use-modal";
 import MemberBook from "../src/components/member/member-book";
 import AddMenuDrawer from "../src/components/menu/add-menu-drawer";
@@ -10,6 +20,8 @@ import { useStateContext } from "../src/hooks/context";
 import { Actions } from "../src/scripts/lib/types";
 import { numberWithCommas } from "../src/scripts/lib/utils";
 import PromptpayFormDrawer from "../src/components/promptpay-form";
+import Input from "../src/components/common/input";
+import { API_URL, SHARE_LOCAL_TOKEN } from "../src/config";
 
 const StyledContainer = styled(Container)({
   padding: "1rem",
@@ -17,12 +29,18 @@ const StyledContainer = styled(Container)({
 });
 
 const Index = () => {
-  const { state, dispatch, promptpay } = useStateContext();
+  const router = useRouter();
+  const {
+    state,
+    dispatch,
+    promptpay: { qrPromptpay, setPromptpay },
+  } = useStateContext();
   const [editMode, setEditMode] = useState(false);
   const [open, close, { isOpen, message: menuID }] = useModal();
   const [openMemberBook, closeMemberBook, { isOpen: memberBookOpen }] =
     useModal();
   const [openQR, closeQR, { isOpen: isQrFormOpen }] = useModal();
+  const [openSahre, closeShare, shareContext] = useModal();
 
   const onEditMenu = (id: number) => {
     setEditMode(true);
@@ -44,7 +62,7 @@ const Index = () => {
   const onClearMenu = () => {
     const r = confirm("ต้องการล้างรายการทั้งหมด ?");
     if (r) {
-      dispatch({ type: Actions.SET_MENU, payload: [] });
+      dispatch({ type: Actions.CLEAR_MEMU });
     }
   };
 
@@ -59,8 +77,130 @@ const Index = () => {
     };
   }, [state]);
 
+  const [copy, setCopy] = useState(false);
+  const [generated, setGenerated] = useState(false);
+  const [updated, setUpdated] = useState(false);
+
+  useEffect(() => {
+    const getBill = async () => {
+      const { billID } = router.query;
+      try {
+        const res = await fetch(`${API_URL}/bills/${billID}`);
+        const data = await res.json();
+        if (data) {
+          dispatch({ type: Actions.SET_STATE, payload: data });
+        }
+      } catch (error) {
+        if (error instanceof Error) console.error(error.message);
+      }
+    };
+    if (router.query.promptpay) {
+      setPromptpay(router.query.promptpay as string);
+    }
+    if (router.query.billID) {
+      getBill();
+    }
+  }, [dispatch, router.query, setPromptpay]);
+
+  const buildQuery = (data: any) => {
+    if (qrPromptpay) {
+      Object.assign(data, { promptpay: qrPromptpay });
+    }
+    const query = queryString.stringify(data);
+    return `${window.location.protocol}//${window.location.host}/?${query}`;
+  };
+
+  const createShareLink = async () => {
+    const data = {};
+    try {
+      const res = await fetch(`${API_URL}/bills`, {
+        method: "post",
+        body: JSON.stringify(state),
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { billID } = await res.json();
+      Object.assign(data, {
+        billID: (billID as string).toString(),
+      });
+      localStorage.setItem(SHARE_LOCAL_TOKEN, billID);
+    } catch (error) {
+      if (error instanceof Error) console.error(error.message);
+    }
+
+    const buildUrl = buildQuery(data);
+    openSahre(buildUrl);
+    setCopy(false);
+    setGenerated(true);
+  };
+
+  const updateLink = async () => {
+    const savedBill = localStorage.getItem(SHARE_LOCAL_TOKEN)!;
+    const data = {};
+    try {
+      const res = await fetch(`${API_URL}/bills/${savedBill}`, {
+        method: "put",
+        body: JSON.stringify(state),
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { _id } = await res.json();
+      Object.assign(data, {
+        billID: (_id as string).toString(),
+      });
+      localStorage.setItem(SHARE_LOCAL_TOKEN, _id);
+    } catch (error) {
+      if (error instanceof Error) console.error(error.message);
+    }
+    const buildUrl = buildQuery(data);
+    openSahre(buildUrl);
+    setCopy(false);
+    setUpdated(true);
+  };
+
+  const copyLink = async () => {
+    /* Get the text field */
+    const copyText = document.getElementById("share-ref") as HTMLInputElement;
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    await navigator.clipboard.writeText(copyText.value);
+    const text = await navigator.clipboard.readText();
+    if (text) {
+      setCopy(true);
+    }
+  };
+
   return (
     <StyledContainer>
+      <Dialog fullWidth open={shareContext.isOpen} onClose={closeShare}>
+        <DialogContent>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            แชร์บิลนี้ให้เพื่อน
+          </Typography>
+          <Input disabled id="share-ref" value={shareContext.message} />
+          <Button disabled={generated} onClick={createShareLink}>
+            สร้างลิงก์ใหม่
+          </Button>
+          {shareContext.message && (
+            <Button disabled={updated} onClick={updateLink} color="warning">
+              อัพเดท
+            </Button>
+          )}
+          {shareContext.message && (
+            <Button disabled={copy} onClick={copyLink}>
+              {!copy ? "คัดลอก" : "คัดลอกแล้ว"}
+            </Button>
+          )}
+        </DialogContent>
+      </Dialog>
       <Box
         height="100%"
         justifyContent="space-between"
@@ -93,11 +233,26 @@ const Index = () => {
         <Box display="flex" flexDirection="column">
           <Button
             variant="outlined"
-            color={promptpay.qrPromptpay ? "warning" : "primary"}
+            // disabled={state.menus.length === 0 || state.members.length === 0}
+            style={{ marginBottom: 10 }}
+            onClick={() => {
+              const shared = localStorage.getItem(SHARE_LOCAL_TOKEN);
+              const buildUrl = shared ? buildQuery({ billID: shared }) : "";
+              setCopy(false)
+              setGenerated(false);
+              setUpdated(false);
+              openSahre(buildUrl);
+            }}
+          >
+            แชร์บิลนี้
+          </Button>
+          <Button
+            variant="outlined"
+            color={qrPromptpay ? "warning" : "primary"}
             style={{ marginBottom: 10 }}
             onClick={() => openQR()}
           >
-            {promptpay.qrPromptpay ? "แก้ไข" : "เพิ่ม"} QR PromptPay
+            {qrPromptpay ? "แก้ไข" : "เพิ่ม"} QR PromptPay
           </Button>
           <Button
             onClick={() => openMemberBook()}

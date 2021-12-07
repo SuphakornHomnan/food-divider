@@ -18,14 +18,14 @@ interface StateContextType {
   state: State;
   dispatch: React.Dispatch<ActionTypes>;
   promptpay: {
-    qrPromptpay: string | null;
-    setPromptpay: React.Dispatch<React.SetStateAction<string | null>>;
+    qrPromptpay: string;
+    setPromptpay: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 const StateContext = createContext<StateContextType | null>(null);
 
 export const StateProvider: React.FC = ({ children }) => {
-  const [qrPromptpay, setPromptpay] = useState<string | null>(null);
+  const [qrPromptpay, setPromptpay] = useState<string>("");
   const [state, dispatch] = useReducer<React.Reducer<State, ActionTypes>>(
     reducer,
     initialState
