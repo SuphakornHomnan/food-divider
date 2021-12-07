@@ -39,7 +39,7 @@ export const StateProvider: React.FC = ({ children }) => {
       const parseSavedMember = JSON.parse(savedMember) as Member[];
       dispatch({
         type: Actions.SET_MEMBER,
-        payload: parseSavedMember.map((member) => ({ ...member, price: 0 })),
+        payload: parseSavedMember,
       });
     }
 
