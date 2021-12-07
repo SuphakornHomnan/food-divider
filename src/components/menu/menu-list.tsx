@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { useStateContext } from "../../hooks/context";
 import MenuCard from "./menu-card";
 
@@ -11,7 +10,7 @@ const MenuList: React.FC<MenuListProps> = ({ onRemove, onEdit }) => {
   const getMemberList = (memberIDs: number[]) =>
     state.members.filter((member) => memberIDs.includes(member.id));
   return (
-    <Box style={{ flex: 1, overflow: "auto", padding: "1.5rem 0.5rem" }}>
+    <>
       {state.menus.map((menu) => (
         <MenuCard
           onEdit={onEdit}
@@ -21,7 +20,7 @@ const MenuList: React.FC<MenuListProps> = ({ onRemove, onEdit }) => {
           members={getMemberList(menu.memberIDs)}
         />
       ))}
-    </Box>
+    </>
   );
 };
 

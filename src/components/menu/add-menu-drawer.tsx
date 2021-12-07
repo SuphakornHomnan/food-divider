@@ -42,6 +42,13 @@ const AddMenuDrawer: React.FC<AddMenuDrawerProps> = ({
         .map((member) => member.id),
     };
     dispatch({ type: Actions.CREATE_MENU, payload: newMenu });
+    setTimeout(() => {
+      const srcollArea = document.querySelector(".menu-scroll-ref");
+      srcollArea?.scrollTo({
+        top: srcollArea.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 100);
     clearValue();
     onClose();
   };

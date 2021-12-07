@@ -38,6 +38,11 @@ const reducer: Reducer<State, ActionTypes> = (state, action) => {
         ...state,
         members: action.payload,
       };
+    case Actions.SET_MENU:
+      return {
+        ...state,
+        menus: action.payload,
+      };
     default:
       throw new Error();
   }

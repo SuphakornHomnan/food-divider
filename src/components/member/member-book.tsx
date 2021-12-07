@@ -6,6 +6,7 @@ import {
   Typography,
   Box,
   IconButton,
+  Button,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ToolBox from "../common/tool-box";
@@ -101,6 +102,12 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
   const onRemoveMemner = (memberID: number) =>
     dispatch({ type: Actions.REMOVE_MEMBER, payload: { memberID } });
 
+  const onClearMember = () => {
+    const r = confirm("ต้องการล้างรายชื่อทั้งหมด ?");
+    if (r) {
+      dispatch({ type: Actions.SET_MEMBER, payload: [] });
+    }
+  }
   return (
     <SwipeableDrawer
       classes={{ paper: classes.drawerPaper }}
@@ -117,12 +124,6 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
         flexDirection="column"
         padding="1rem 0"
       >
-        {qrPromptpay && (
-          <Box padding="0 2rem" textAlign="center">
-            <Typography>QR Promptpay</Typography>
-            <GenerateQRCode quietZone={10} inputNumber={qrPromptpay} />
-          </Box>
-        )}
         <Box
           display="flex"
           justifyContent="space-between"
@@ -135,6 +136,17 @@ const MemberBook: React.FC<{ open?: boolean; onClose?: () => void }> = ({
           <IconButton onClick={onClose} color="error">
             <CloseOutlined />
           </IconButton>
+        </Box>
+        {qrPromptpay && (
+          <Box padding="0 2rem" textAlign="center">
+            <Typography>QR Promptpay</Typography>
+            <GenerateQRCode quietZone={10} inputNumber={qrPromptpay} />
+          </Box>
+        )}
+        <Box padding="0 1.5rem" paddingTop={2} textAlign="right">
+          <Button color="error" onClick={onClearMember}>
+            ล้างรายชื่อ
+          </Button>
         </Box>
         <Box className="scroll-ref" flex={1} padding="1rem" overflow="auto">
           {state.members.map((member) => (

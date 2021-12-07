@@ -23,6 +23,7 @@ export enum Actions {
   REMOVE_MEMBER = "REMOVE_MEMBER",
   SET_STATE = "SET_STATE",
   SET_MEMBER = "SET_MEMBER",
+  SET_MENU = "SET_MENU",
 }
 
 type CREATE_MENU = { type: Actions.CREATE_MENU; payload: CreateMenu };
@@ -40,6 +41,7 @@ type CREATE_MEMBER = { type: Actions.CREATE_MEMBER; payload: CreateMember };
 type REMOVE_MEMBER = { type: Actions.REMOVE_MEMBER; payload: RemoveMember };
 type SET_STATE = { type: Actions.SET_STATE; payload: State };
 type SET_MEMBER = { type: Actions.SET_MEMBER; payload: Member[] };
+type SET_MENU = { type: Actions.SET_MENU; payload: Menu[] };
 
 export type ActionTypes =
   | CREATE_MENU
@@ -50,4 +52,5 @@ export type ActionTypes =
   | CREATE_MEMBER
   | REMOVE_MEMBER
   | SET_STATE
-  | SET_MEMBER;
+  | SET_MEMBER
+  | SET_MENU;

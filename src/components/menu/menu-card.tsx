@@ -9,7 +9,8 @@ import MemberChip from "../member/member-chip";
 
 const CardOuterContainer = styled(Box)({
   position: "relative",
-  marginBottom: 30,
+  margin: "30px 10px"
+
 });
 
 interface MenuCardProps {

@@ -5,8 +5,12 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { MEMBER_LOCAL_STORAGE_TOKEN } from "../config";
+import {
+  MEMBER_LOCAL_STORAGE_TOKEN,
+  MENU_LOCAL_STORAGE_TOKEN,
+} from "../config";
 import { Member } from "../scripts/dto/member-dto";
+import { Menu } from "../scripts/dto/menu-dto";
 import reducer, { initialState } from "../scripts/lib/reducer";
 import { Actions, ActionTypes, State } from "../scripts/lib/types";
 
@@ -29,6 +33,8 @@ export const StateProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const savedMember = localStorage.getItem(MEMBER_LOCAL_STORAGE_TOKEN);
+    const savedMenu = localStorage.getItem(MENU_LOCAL_STORAGE_TOKEN);
+
     if (savedMember) {
       const parseSavedMember = JSON.parse(savedMember) as Member[];
       dispatch({
@@ -36,14 +42,23 @@ export const StateProvider: React.FC = ({ children }) => {
         payload: parseSavedMember.map((member) => ({ ...member, price: 0 })),
       });
     }
+
+    if (savedMenu) {
+      const parseSavedMenu = JSON.parse(savedMenu) as Menu[];
+      dispatch({
+        type: Actions.SET_MENU,
+        payload: parseSavedMenu,
+      });
+    }
   }, []);
 
   useEffect(() => {
+    localStorage.setItem(MENU_LOCAL_STORAGE_TOKEN, JSON.stringify(state.menus));
     localStorage.setItem(
       MEMBER_LOCAL_STORAGE_TOKEN,
       JSON.stringify(state.members)
     );
-  }, [state.members]);
+  }, [state]);
 
   const promptpay = {
     qrPromptpay,
