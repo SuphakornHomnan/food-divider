@@ -232,19 +232,12 @@ const Index = () => {
         </Box>
         <Box display="flex" flexDirection="column">
           <Button
-            variant="outlined"
-            // disabled={state.menus.length === 0 || state.members.length === 0}
+            onClick={() => openMemberBook()}
             style={{ marginBottom: 10 }}
-            onClick={() => {
-              const shared = localStorage.getItem(SHARE_LOCAL_TOKEN);
-              const buildUrl = shared ? buildQuery({ billID: shared }) : "";
-              setCopy(false)
-              setGenerated(false);
-              setUpdated(false);
-              openSahre(buildUrl);
-            }}
+            variant="outlined"
+            startIcon={<AttachMoneyOutlined />}
           >
-            แชร์บิลนี้
+            จ่ายคนละ
           </Button>
           <Button
             variant="outlined"
@@ -255,12 +248,22 @@ const Index = () => {
             {qrPromptpay ? "แก้ไข" : "เพิ่ม"} QR PromptPay
           </Button>
           <Button
-            onClick={() => openMemberBook()}
-            style={{ marginBottom: 10 }}
             variant="outlined"
-            startIcon={<AttachMoneyOutlined />}
+            disabled={state.menus.length === 0 || state.members.length === 0}
+            style={{ marginBottom: 10 }}
+            onClick={() => {
+              const shared = localStorage.getItem(SHARE_LOCAL_TOKEN);
+              const buildUrl =
+                shared && !router.query.billID
+                  ? buildQuery({ billID: shared })
+                  : "";
+              setCopy(false);
+              setGenerated(false);
+              setUpdated(false);
+              openSahre(buildUrl);
+            }}
           >
-            จ่ายคนละ
+            แชร์บิลนี้
           </Button>
         </Box>
         <Box className="menu-scroll-ref" style={{ overflow: "auto" }} flex={1}>
